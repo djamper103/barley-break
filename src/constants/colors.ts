@@ -1,0 +1,17 @@
+export const COLORS = {
+  WHITE: '#fff',
+  BLACK: '#000',
+  TRANSPARENT: 'transparent',
+  MAROON_FLUSH: '#bf1650',
+  STEEL_BLUE: '#4579BF',
+  CLOUD_BURST: '#1F304E',
+  DUNE: '#252320',
+  GHOST: '#C6C9CF',
+  ALUMINIUM: '#A9ACB7',
+  ATHENS_GRAY: '#EBEBF2',
+  PERIWINKLE_GRAY: '#B1C5E2',
+  OXFORD_BLUE: '#39445A',
+  SAN_MARINO: '#3F51B5',
+  APPLE: '#60B53F',
+  RED: '#FF0000',
+};
