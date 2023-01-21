@@ -1,3 +1,4 @@
+import {ImageSourcePropType} from 'react-native';
 import PAZZLE_1_01 from '../../assets/images/pazzle_1/image_part_001.png';
 import PAZZLE_1_02 from '../../assets/images/pazzle_1/image_part_002.png';
 import PAZZLE_1_03 from '../../assets/images/pazzle_1/image_part_003.png';
@@ -17,3 +18,17 @@ export const PAZZLE_ICON_1_06 = PAZZLE_1_06;
 export const PAZZLE_ICON_1_07 = PAZZLE_1_07;
 export const PAZZLE_ICON_1_08 = PAZZLE_1_08;
 export const PAZZLE_ICON_1_09 = PAZZLE_1_09;
+
+type ImagesMap = {[key: string]: ImageSourcePropType};
+
+export const PAZZLE_IMAGES_BY_KEYS: ImagesMap = {
+  0: PAZZLE_ICON_1_01,
+  1: PAZZLE_ICON_1_02,
+  2: PAZZLE_ICON_1_03,
+  3: PAZZLE_ICON_1_04,
+  4: PAZZLE_ICON_1_05,
+  5: PAZZLE_ICON_1_06,
+  6: PAZZLE_ICON_1_07,
+  7: PAZZLE_ICON_1_08,
+  8: PAZZLE_ICON_1_09,
+};

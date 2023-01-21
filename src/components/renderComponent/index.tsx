@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 import Animated, {
   useAnimatedRef,
   useAnimatedStyle,
@@ -8,6 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {PuzzleRenderArray} from '../../types/puzzle';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+import {PAZZLE_IMAGES_BY_KEYS} from '../../constants/images';
 
 interface RenderComponentProps {
   data: PuzzleRenderArray;
@@ -65,7 +66,8 @@ export const RenderComponent: FC<RenderComponentProps> = ({
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      backgroundColor: isNullValue ? 'transparent' : 'red',
+      //   backgroundColor: isNullValue ? 'transparent' : 'red',
+      opacity: isNullValue ? 0 : 1,
       transform: [
         {translateY: withSpring(offsetY.value)},
         {translateX: withSpring(offsetX.value)},
@@ -86,13 +88,8 @@ export const RenderComponent: FC<RenderComponentProps> = ({
   return (
     <Animated.View style={[animatedStyle, styles.container]} ref={aref}>
       <GestureDetector gesture={panGesture}>
-        <Text style={[isNullValue && styles.text]}>{data.url}</Text>
-        {/* <Image
-          style={styles.image}
-          source={{
-            uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
-          }}
-        /> */}
+        {/* <Text style={[isNullValue && styles.text]}>{data.url}</Text> */}
+        <Image style={styles.image} source={PAZZLE_IMAGES_BY_KEYS[data.id]} />
       </GestureDetector>
     </Animated.View>
   );
@@ -100,8 +97,8 @@ export const RenderComponent: FC<RenderComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: 70,
-    height: 70,
+    width: 100,
+    height: 100,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -109,7 +106,7 @@ const styles = StyleSheet.create({
     color: 'transparent',
   },
   image: {
-    width: 70,
-    height: 70,
+    width: 100,
+    height: 100,
   },
 });
