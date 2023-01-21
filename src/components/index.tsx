@@ -1,5 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {randomArrayFunc} from '../common/functions/randomArray';
 import {setArrayCurrentFunc} from '../common/functions/setPositionArrayFunc';
 import {ModalContainer} from '../common/modal';
@@ -36,7 +37,7 @@ export const PuzzleGame: FC<PuzzleGameProps> = ({}) => {
     reducer => reducer.currentArrayReducer,
   );
 
-  const {originLine, currentLine, isOriginLine} = useAppSelector(
+  const {originLine, currentLine} = useAppSelector(
     reducer => reducer.sequenceOfArrayReducer,
   );
 
@@ -90,15 +91,10 @@ export const PuzzleGame: FC<PuzzleGameProps> = ({}) => {
     dispatch(setPositionTarget({}));
   };
 
-  const arrayCurrentFunc = () => {
-    setTimeout(() => {
-      dispatch(setArrayCurrent(positionArray));
-    }, 600);
-  };
-
-  const onPress = (value: PuzzleRenderArray) => {
+  const onPress = (data: PuzzleRenderArray, valueMove: any) => {
     setArrayCurrentFunc(
-      value,
+      data,
+      valueMove,
       nullItem,
       arrayLength,
       positionArray,
@@ -109,7 +105,7 @@ export const PuzzleGame: FC<PuzzleGameProps> = ({}) => {
     );
   };
 
-  console.log(isOriginLine && isOriginLine);
+  // console.log(isOriginLine && isOriginLine);
 
   const RenderItem: any = (data: any) => {
     return (
@@ -120,7 +116,6 @@ export const PuzzleGame: FC<PuzzleGameProps> = ({}) => {
         onPress={onPress}
         positionArrayFunc={positionArrayFunc}
         setPositionTargetNull={setPositionTargetNull}
-        setArrayCurrentFunc={arrayCurrentFunc}
       />
     );
   };
@@ -131,14 +126,16 @@ export const PuzzleGame: FC<PuzzleGameProps> = ({}) => {
           <ButtonContainer onPress={onRandomArray} text={'Random array'} />
         </ModalContainer>
       )}
-      <FlatList
-        data={arrayCurrent}
-        renderItem={RenderItem}
-        keyExtractor={item => `${item.id}`}
-        showsVerticalScrollIndicator={false}
-        numColumns={arrayLength}
-        contentContainerStyle={styles.container}
-      />
+      <GestureHandlerRootView>
+        <FlatList
+          data={arrayCurrent}
+          renderItem={RenderItem}
+          keyExtractor={item => `${item.id}`}
+          showsVerticalScrollIndicator={false}
+          numColumns={arrayLength}
+          contentContainerStyle={styles.container}
+        />
+      </GestureHandlerRootView>
     </View>
   );
 };

@@ -10,8 +10,8 @@ interface ArrayState {
 
 const initialState: ArrayState = {
   arrayCurrent: [],
-  arrayLength: 4,
-  imagePath: 'path',
+  arrayLength: 3,
+  imagePath: 'PAZZLE_ICON_1_',
   nullItem: {},
 };
 

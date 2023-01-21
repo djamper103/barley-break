@@ -3,7 +3,8 @@ import {findLineRowFunc} from './findLineRowFunc';
 import {newArrayFunc} from './newArrayFunc';
 
 export const setArrayCurrentFunc = (
-  value: PuzzleRenderArray | PositionType,
+  data: PuzzleRenderArray | PositionType,
+  valueMove: any,
   nullItem: PuzzleRenderArray | PositionType | any,
   arrayLength: number,
   positionArray: PositionType[],
@@ -12,6 +13,8 @@ export const setArrayCurrentFunc = (
   setCurrentLine: (value: number[]) => void,
   dispatch: (value: any) => void,
 ) => {
+  const positionType =
+    Math.abs(valueMove.x) > Math.abs(valueMove.y) ? 'x' : 'y';
   const {
     countLineTarget,
     countLineNull,
@@ -20,7 +23,7 @@ export const setArrayCurrentFunc = (
     valueTarget,
     valueNull,
     array,
-  } = findLineRowFunc(value, nullItem, arrayLength, positionArray);
+  } = findLineRowFunc(data, nullItem, arrayLength, positionArray);
 
   const {arrCurrent, originLine} = newArrayFunc(array, valueTarget, valueNull);
 
@@ -31,32 +34,44 @@ export const setArrayCurrentFunc = (
 
   if (countLineTarget === countLineNull) {
     if (rowNull + 1 === rowTarget || rowNull - 1 === rowTarget) {
-      const positionType = 'x';
-      dispatch(
-        setPositionTarget({
-          id: valueTarget.id,
-          x: valueNull.x - valueTarget.x,
-          y: valueNull.y,
-          positionType,
-        }),
-      );
-      setPositionFunc();
+      if (
+        (positionType === 'x' &&
+          valueNull.x - valueTarget.x > 0 &&
+          valueMove.x > 0) ||
+        (valueNull.x - valueTarget.x < 0 && valueMove.x < 0)
+      ) {
+        dispatch(
+          setPositionTarget({
+            id: valueTarget.id,
+            x: valueNull.x - valueTarget.x,
+            y: valueNull.y,
+            positionType,
+          }),
+        );
+        setPositionFunc();
+      }
     }
-  } else if (rowNull === rowTarget) {
+  } else {
     if (
       countLineNull + 1 === countLineTarget ||
       countLineNull - 1 === countLineTarget
     ) {
-      const positionType = 'y';
-      dispatch(
-        setPositionTarget({
-          id: valueTarget.id,
-          x: valueNull.x,
-          y: valueNull.y - valueTarget.y,
-          positionType,
-        }),
-      );
-      setPositionFunc();
+      if (
+        (positionType === 'y' &&
+          valueNull.y - valueTarget.y > 0 &&
+          valueMove.y > 0) ||
+        (valueNull.y - valueTarget.y < 0 && valueMove.y < 0)
+      ) {
+        dispatch(
+          setPositionTarget({
+            id: valueTarget.id,
+            x: valueNull.x,
+            y: valueNull.y - valueTarget.y,
+            positionType,
+          }),
+        );
+        setPositionFunc();
+      }
     }
   }
 };

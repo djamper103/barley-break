@@ -3,6 +3,7 @@ import {SafeAreaView, StatusBar} from 'react-native';
 import {PuzzleGame} from './components';
 import {Provider} from 'react-redux';
 import {setupStore} from './redux/store/store';
+import 'react-native-gesture-handler';
 
 const store = setupStore();
 

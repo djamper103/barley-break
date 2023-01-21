@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Pressable, StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import Animated, {
   useAnimatedRef,
   useAnimatedStyle,
@@ -7,15 +7,15 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import {PuzzleRenderArray} from '../../types/puzzle';
+import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 
 interface RenderComponentProps {
   data: PuzzleRenderArray;
   isNullValue: boolean;
   positionTarget: any;
-  onPress: (value: PuzzleRenderArray) => void;
+  onPress: (data: PuzzleRenderArray, value: any) => void;
   positionArrayFunc: (value: any) => void;
   setPositionTargetNull: () => void;
-  setArrayCurrentFunc: () => void;
 }
 
 export const RenderComponent: FC<RenderComponentProps> = ({
@@ -25,10 +25,11 @@ export const RenderComponent: FC<RenderComponentProps> = ({
   onPress,
   positionArrayFunc,
   setPositionTargetNull,
-  setArrayCurrentFunc,
 }) => {
   const offsetX = useSharedValue(0);
   const offsetY = useSharedValue(0);
+
+  const aref = useAnimatedRef<any>();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [count, setCount] = useState(0);
@@ -39,22 +40,9 @@ export const RenderComponent: FC<RenderComponentProps> = ({
         ? (offsetX.value = positionTarget.x)
         : (offsetY.value = positionTarget.y);
       setPositionTargetNull();
-      setArrayCurrentFunc();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [positionTarget]);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: isNullValue ? 'transparent' : 'red',
-      transform: [
-        {translateY: withSpring(offsetY.value)},
-        {translateX: withSpring(offsetX.value)},
-      ],
-    };
-  });
-
-  const aref = useAnimatedRef<any>();
 
   useEffect(() => {
     if (aref && aref.current) {
@@ -75,13 +63,29 @@ export const RenderComponent: FC<RenderComponentProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aref.current]);
 
-  const onPressItem = () => {
-    onPress(data);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: isNullValue ? 'transparent' : 'red',
+      transform: [
+        {translateY: withSpring(offsetY.value)},
+        {translateX: withSpring(offsetX.value)},
+      ],
+    };
+  });
+
+  const onPressItem = (value?: any) => {
+    onPress(data, value);
   };
 
+  const panGesture = Gesture.Pan()
+    .runOnJS(true)
+    .onEnd(event => {
+      onPressItem(event);
+    });
+
   return (
-    <Pressable onPress={onPressItem}>
-      <Animated.View style={[animatedStyle, styles.container]} ref={aref}>
+    <Animated.View style={[animatedStyle, styles.container]} ref={aref}>
+      <GestureDetector gesture={panGesture}>
         <Text style={[isNullValue && styles.text]}>{data.url}</Text>
         {/* <Image
           style={styles.image}
@@ -89,8 +93,8 @@ export const RenderComponent: FC<RenderComponentProps> = ({
             uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==',
           }}
         /> */}
-      </Animated.View>
-    </Pressable>
+      </GestureDetector>
+    </Animated.View>
   );
 };
 
