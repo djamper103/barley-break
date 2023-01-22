@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Modal, StyleSheet} from 'react-native';
+import {Modal} from 'react-native';
 
 interface ModalContainerProps {
   children?: any;
@@ -17,16 +17,8 @@ export const ModalContainer: FC<ModalContainerProps> = ({
       animationType="fade"
       transparent={true}
       visible={isModal}
-      onRequestClose={onPress}
-      style={styles.container}>
+      onRequestClose={onPress}>
       {children}
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

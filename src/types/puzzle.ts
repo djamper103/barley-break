@@ -8,4 +8,5 @@ export interface PositionType {
   y: number;
   id: number;
   url: string;
+  height: number;
 }

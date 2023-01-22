@@ -37,6 +37,7 @@ export const RenderComponent: FC<RenderComponentProps> = ({
 
   useEffect(() => {
     if (positionTarget.id === data.id) {
+      // console.log(positionTarget);
       positionTarget.positionType === 'x'
         ? (offsetX.value = positionTarget.x)
         : (offsetY.value = positionTarget.y);
@@ -57,7 +58,13 @@ export const RenderComponent: FC<RenderComponentProps> = ({
           pageY: number,
         ) => {
           setCount(1);
-          positionArrayFunc({x: pageX, y: pageY, id: data.id, url: data.url});
+          positionArrayFunc({
+            x: pageX,
+            y: pageY,
+            id: data.id,
+            url: data.url,
+            height,
+          });
         },
       );
     }

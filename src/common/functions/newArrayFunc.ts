@@ -15,6 +15,7 @@ export const newArrayFunc = (
           x: el.x,
           y: el.y,
           url: value2.url,
+          height: el.height,
         };
       } else if (el.id === value2.id) {
         originLine.push(value1.id);
@@ -23,6 +24,7 @@ export const newArrayFunc = (
           x: el.x,
           y: el.y,
           url: value1.url,
+          height: el.height,
         };
       } else {
         originLine.push(el.id);

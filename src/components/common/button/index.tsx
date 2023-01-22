@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {Pressable, StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {dw} from '../../../utils/dimensions';
 
 interface ButtonContainerProps {
   text?: string;
@@ -40,11 +41,11 @@ export const ButtonContainer: FC<ButtonContainerProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    marginTop: 200,
     padding: 20,
     borderRadius: 10,
     backgroundColor: 'green',
     justifyContent: 'center',
+    width: dw(240),
   },
   buttonLong: {
     paddingVertical: 10,

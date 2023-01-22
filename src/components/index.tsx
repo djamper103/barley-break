@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {Alert, FlatList, StyleSheet, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {randomArrayFunc} from '../common/functions/randomArray';
 import {setArrayCurrentFunc} from '../common/functions/setPositionArrayFunc';
@@ -21,6 +21,7 @@ import {
   setOriginLine,
 } from '../redux/store/actionCreator/actionCreatorSequence';
 import {PositionType, PuzzleRenderArray} from '../types/puzzle';
+import {dh} from '../utils/dimensions';
 import {ButtonContainer} from './common/button';
 
 import {RenderComponent} from './renderComponent';
@@ -37,7 +38,7 @@ export const PuzzleGame: FC<PuzzleGameProps> = ({}) => {
     reducer => reducer.currentArrayReducer,
   );
 
-  const {originLine, currentLine} = useAppSelector(
+  const {originLine, isOriginLine, currentLine} = useAppSelector(
     reducer => reducer.sequenceOfArrayReducer,
   );
 
@@ -75,6 +76,7 @@ export const PuzzleGame: FC<PuzzleGameProps> = ({}) => {
 
   const onRandomArray = () => {
     dispatch(setPositionArray([]));
+    setPositionArrayCurrent([]);
     dispatch(setArrayCurrent(randomArrayFunc([...arrayCurrent])));
     dispatch(setIsModal(false));
   };
@@ -105,7 +107,9 @@ export const PuzzleGame: FC<PuzzleGameProps> = ({}) => {
     );
   };
 
-  // console.log(isOriginLine && isOriginLine);
+  useEffect(() => {
+    isOriginLine && Alert.alert('Congratulation you won this game');
+  }, [isOriginLine]);
 
   const RenderItem: any = (data: any) => {
     return (
@@ -123,7 +127,11 @@ export const PuzzleGame: FC<PuzzleGameProps> = ({}) => {
     <View>
       {isModal && (
         <ModalContainer isModal={isModal}>
-          <ButtonContainer onPress={onRandomArray} text={'Random array'} />
+          <ButtonContainer
+            onPress={onRandomArray}
+            text={'Random array'}
+            containerStyle={styles.containerModal}
+          />
         </ModalContainer>
       )}
       <GestureHandlerRootView>
@@ -144,10 +152,17 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 50,
-    paddingVertical: 10,
-    borderColor: 'green',
-    borderWidth: 2,
+    marginTop: dh(240),
+    // paddingVertical: 10,
+    // borderColor: 'green',
+    // borderWidth: 2,
+  },
+  containerModal: {
+    backgroundColor: 'rgba(57, 50, 54, 0.4)',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   text: {
     color: 'transparent',
