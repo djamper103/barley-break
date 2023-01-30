@@ -1,14 +1,12 @@
-import {PositionType, PuzzleRenderArray} from '../../types/puzzle';
+import {PositionType} from '../../types/puzzle';
 
 export const findLineRowFunc = (
-  value: PuzzleRenderArray | PositionType,
-  nullItem: any,
+  value: PositionType,
+  nullItem: PositionType,
   arrayLength: number,
-  positionArray: PositionType[],
+  currentArray: PositionType[],
 ) => {
-  let valueTarget: any = {};
-  let valueNull: any = {};
-  const array = [...positionArray];
+  const array = [...currentArray];
 
   let countCurrentLine: number = 0;
   let countLineTarget: number = 0;
@@ -30,12 +28,10 @@ export const findLineRowFunc = (
     }
     value.id === el.id &&
       ((countLineTarget = countCurrentLine),
-      (valueTarget = el),
       (rowTarget =
         countCurrentLine === 0 ? countCorrentRow - 1 : countCorrentRow));
     nullItem.id === el.id &&
       ((countLineNull = countCurrentLine),
-      (valueNull = el),
       (rowNull =
         countCurrentLine === 0 ? countCorrentRow - 1 : countCorrentRow));
   });
@@ -45,8 +41,6 @@ export const findLineRowFunc = (
     countLineNull,
     rowTarget,
     rowNull,
-    valueTarget,
-    valueNull,
     array,
   };
 };

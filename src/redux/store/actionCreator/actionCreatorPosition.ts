@@ -11,8 +11,3 @@ export const setPositionTarget =
         dispatch(ArrayCurrentSlice.actions.setArrayCurrent(array));
       }, 500);
   };
-
-export const setPositionArray =
-  (value: PositionType[]) => (dispatch: AppDispatch) => {
-    dispatch(PositionSlice.actions.setPositionArray(value));
-  };

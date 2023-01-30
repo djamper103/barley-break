@@ -3,12 +3,14 @@ import currentArrayReducer from './reducers/arraySlice';
 import sequenceOfArrayReducer from './reducers/sequenceOfArraySlice';
 import modalReducer from './reducers/modalSlice';
 import positionReducer from './reducers/positionSlice';
+import themeReducer from './reducers/themeSlice';
 
 const rootReducer = combineReducers({
   currentArrayReducer,
   sequenceOfArrayReducer,
   modalReducer,
   positionReducer,
+  themeReducer,
 });
 
 export const setupStore = () => {

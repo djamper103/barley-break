@@ -1,92 +1,74 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import React, {FC, useEffect} from 'react';
-import {Platform, StatusBar} from 'react-native';
+import {TransitionSpec} from '@react-navigation/stack/lib/typescript/src/types';
+import React, {FC} from 'react';
+// import {StatusBar} from 'react-native';
+// import {Menu} from '../components/menu';
 import {COLORS} from '../constants/colors';
+import {ARROW_LEFT_ICON} from '../constants/images';
 import {useAppDispatch, useAppSelector} from '../hooks/redux';
-import {dw} from '../utils/dimensions';
-import {DrawerScreen} from './components/index';
+import {setIsTheme} from '../redux/store/actionCreator/actionCreatorTheme';
+import {HeaderNavigation} from './headerNavigation';
 import {routesStack} from './routes';
-import auth from '@react-native-firebase/auth';
-import {setSignIn} from 'redux/store/actionCreator/actionCreatorLogin';
-import {setIsNet} from 'redux/store/actionCreator/actionCreator';
-import {setFavorite} from 'redux/store/actionCreator/actionCreatorFavorite';
-import {request, PERMISSIONS} from 'react-native-permissions';
+
+const Stack = createStackNavigator();
+const config: TransitionSpec = {
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
+};
 
 export const NavigationContainerFC: FC = () => {
-  const Stack = createStackNavigator();
   const {isTheme} = useAppSelector(reducer => reducer.themeReducer);
-  const {isSignIn} = useAppSelector(reducer => reducer.loginReducer);
+
+  const color = isTheme ? COLORS.BLACK : COLORS.WHITE;
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    request(
-      Platform.OS === 'ios'
-        ? PERMISSIONS.IOS.CAMERA
-        : PERMISSIONS.ANDROID.CAMERA,
-    ).then(() => {
-      request(
-        Platform.OS === 'ios'
-          ? PERMISSIONS.IOS.MEDIA_LIBRARY
-          : PERMISSIONS.ANDROID.ACCESS_MEDIA_LOCATION,
-      );
-    });
-  }, []);
-
-  useEffect(() => {
-    if (auth().currentUser !== null) {
-      dispatch(setIsNet());
-      dispatch(setSignIn());
-      dispatch(setFavorite(isSignIn));
-    }
-  }, [dispatch, isSignIn]);
-
-  useEffect(() => {
-    dispatch(setIsNet());
-  }, [dispatch]);
+  const setTheme = () => {
+    dispatch(setIsTheme(isTheme));
+  };
 
   return (
     <NavigationContainer>
-      <StatusBar
-        backgroundColor={isTheme ? COLORS.CLOUD_BURST : COLORS.STEEL_BLUE}
-      />
-      <Stack.Navigator>
-        {/* <Stack.Screen
-          name="Tabs"
-          component={Tabs}
-          options={{
-            headerShown: false,
-          }}
-        /> */}
-        <Stack.Screen
-          name="Drawer"
-          component={DrawerScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
+      {/* <StatusBar
+        backgroundColor={isTheme ? COLORS.CLOUD_BURST : COLORS.TRANSPARENT}
+      /> */}
+      {/* <StatusBar translucent={true} backgroundColor={COLORS.TRANSPARENT} /> */}
+      <Stack.Navigator
+        screenOptions={{
+          cardStyle: {
+            backgroundColor: color,
+          },
+        }}>
         {routesStack.map(el => (
           <Stack.Screen
             name={el.name}
             component={el.component}
             key={el.name}
             options={{
-              headerTitleStyle: {
-                fontSize: 24,
-                color: COLORS.WHITE,
+              header: (props: any) => (
+                <HeaderNavigation
+                  leftIcon={ARROW_LEFT_ICON}
+                  componentName={el.name}
+                  isTheme={isTheme}
+                  props={props}
+                  setTheme={setTheme}
+                />
+              ),
+              transitionSpec: {
+                open: config,
+                close: config,
               },
-              headerTitleAlign: 'center',
-              headerStyle: {
-                backgroundColor: isTheme
-                  ? COLORS.CLOUD_BURST
-                  : COLORS.STEEL_BLUE,
-                height: dw(57),
-              },
-              headerTintColor: COLORS.WHITE,
-              cardStyle: {
-                backgroundColor: isTheme ? COLORS.OXFORD_BLUE : COLORS.WHITE,
-              },
+              // cardStyle: {
+              //   backgroundColor: color,
+              // },
             }}
           />
         ))}

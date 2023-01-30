@@ -1,7 +1,7 @@
 import {PositionType} from '../../types/puzzle';
 
 export const newArrayFunc = (
-  arrCurrent: any,
+  arrCurrent: any[],
   value1: PositionType,
   value2: PositionType,
 ) => {
@@ -10,22 +10,10 @@ export const newArrayFunc = (
     arrCurrent: arrCurrent.map((el: any) => {
       if (el.id === value1.id) {
         originLine.push(value2.id);
-        return {
-          id: value2.id,
-          x: el.x,
-          y: el.y,
-          url: value2.url,
-          height: el.height,
-        };
+        return value2;
       } else if (el.id === value2.id) {
         originLine.push(value1.id);
-        return {
-          id: value1.id,
-          x: el.x,
-          y: el.y,
-          url: value1.url,
-          height: el.height,
-        };
+        return value1;
       } else {
         originLine.push(el.id);
         return el;

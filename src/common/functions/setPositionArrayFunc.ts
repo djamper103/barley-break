@@ -1,33 +1,28 @@
-import {PositionType, PuzzleRenderArray} from '../../types/puzzle';
+import {PositionType} from '../../types/puzzle';
 import {findLineRowFunc} from './findLineRowFunc';
 import {newArrayFunc} from './newArrayFunc';
 
 export const setArrayCurrentFunc = (
-  data: PuzzleRenderArray | PositionType,
+  arrayCurrent: any[],
+  valueTarget: PositionType,
   valueMove: any,
-  nullItem: PuzzleRenderArray | PositionType | any,
+  valueNull: PositionType,
   arrayLength: number,
-  positionArray: PositionType[],
-  setPositionArray: (value: any) => void,
   setPositionTarget: (value: any, array: any) => void,
   setCurrentLine: (value: number[]) => void,
   dispatch: (value: any) => void,
 ) => {
-  const {
-    countLineTarget,
-    countLineNull,
-    rowTarget,
-    rowNull,
+  const {countLineTarget, countLineNull, rowTarget, rowNull, array} =
+    findLineRowFunc(valueTarget, valueNull, arrayLength, arrayCurrent);
+
+  const {arrCurrent, originLine} = newArrayFunc(
+    [...array],
     valueTarget,
     valueNull,
-    array,
-  } = findLineRowFunc(data, nullItem, arrayLength, positionArray);
-
-  const {arrCurrent, originLine} = newArrayFunc(array, valueTarget, valueNull);
+  );
 
   const setPositionFunc = () => {
     dispatch(setCurrentLine(originLine));
-    dispatch(setPositionArray(arrCurrent));
   };
 
   const positionType =

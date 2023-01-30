@@ -9,6 +9,11 @@ import PAZZLE_1_07 from '../../assets/images/pazzle_1/image_part_007.png';
 import PAZZLE_1_08 from '../../assets/images/pazzle_1/image_part_008.png';
 import PAZZLE_1_09 from '../../assets/images/pazzle_1/image_part_009.png';
 
+import ARROW_LEFT from '../../assets/images/arrow/left/left.png';
+
+import THEME_DARK from '../../assets/images/themes/dark/dark.png';
+import THEME_LIGHT from '../../assets/images/themes/light/light.png';
+
 export const PAZZLE_ICON_1_01 = PAZZLE_1_01;
 export const PAZZLE_ICON_1_02 = PAZZLE_1_02;
 export const PAZZLE_ICON_1_03 = PAZZLE_1_03;
@@ -32,3 +37,8 @@ export const PAZZLE_IMAGES_BY_KEYS: ImagesMap = {
   7: PAZZLE_ICON_1_08,
   8: PAZZLE_ICON_1_09,
 };
+
+export const ARROW_LEFT_ICON = ARROW_LEFT;
+
+export const THEME_DARK_ICON = THEME_DARK;
+export const THEME_LIGHT_ICON = THEME_LIGHT;

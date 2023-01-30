@@ -1,9 +1,16 @@
+import {randomArrayFunc} from '../../../common/functions/randomArray';
 import {ArrayCurrentSlice} from '../reducers/arraySlice';
+import {ModalSlice} from '../reducers/modalSlice';
 import {AppDispatch} from '../store';
 
-export const setArrayCurrent = (array: any[]) => (dispatch: AppDispatch) => {
-  dispatch(ArrayCurrentSlice.actions.setArrayCurrent(array));
-};
+export const setArrayCurrent =
+  (array: any[], type?: string, isArrayRandomStart?: boolean) =>
+  (dispatch: AppDispatch) => {
+    dispatch(ArrayCurrentSlice.actions.setArrayCurrent(array));
+    isArrayRandomStart &&
+      dispatch(ArrayCurrentSlice.actions.setArrayRandomStart([]));
+    type === 'modal' && dispatch(ModalSlice.actions.setIsModal(false));
+  };
 
 export const setArrayStart =
   (
@@ -25,6 +32,17 @@ export const setArrayStart =
       ArrayCurrentSlice.actions.setArrayCurrent({
         array: arrayGenerate,
         nullItem: arrayGenerate[arrayGenerate.length - 1],
+        arrayLength,
+        imagePath,
       }),
     );
+    dispatch(
+      ArrayCurrentSlice.actions.setArrayRandomStart(
+        randomArrayFunc([...arrayGenerate]),
+      ),
+    );
   };
+
+export const setNull = (value: Object) => (dispatch: AppDispatch) => {
+  dispatch(ArrayCurrentSlice.actions.setNull(value));
+};
