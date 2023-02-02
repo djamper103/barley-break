@@ -12,5 +12,5 @@ export const sizeArrayImages = [3, 4];
 export const arrayMenu: string[] = [
   'Classic game',
   'Random image',
-  'Categories',
+  'Choose image',
 ];

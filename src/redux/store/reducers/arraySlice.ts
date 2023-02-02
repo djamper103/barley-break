@@ -5,7 +5,6 @@ interface ArrayState {
   arrayCurrent: any[];
   arrayRandomStart: any[];
   arrayLength: number;
-  imagePath: string;
   nullItem: PuzzleRenderArray | PositionType | any;
 }
 
@@ -13,7 +12,6 @@ const initialState: ArrayState = {
   arrayCurrent: [],
   arrayRandomStart: [],
   arrayLength: 3,
-  imagePath: 'PAZZLE_ICON_1_',
   nullItem: {},
 };
 
@@ -26,14 +24,16 @@ export const ArrayCurrentSlice = createSlice({
         ? (state.arrayCurrent = action.payload)
         : ((state.arrayCurrent = action.payload.array),
           (state.nullItem = action.payload.nullItem),
-          (state.arrayLength = action.payload.arrayLength),
-          (state.imagePath = action.payload.imagePath));
+          (state.arrayLength = action.payload.arrayLength));
     },
-    setArrayRandomStart(state, action) {
-      state.arrayRandomStart = action.payload;
-    },
+    // setArrayRandomStart(state, action) {
+    //   state.arrayRandomStart = action.payload;
+    // },
     setNull(state, action) {
       state.nullItem = action.payload;
+    },
+    setArrayLength(state, action) {
+      state.arrayLength = action.payload;
     },
   },
 });

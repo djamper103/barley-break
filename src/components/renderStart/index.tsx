@@ -1,5 +1,5 @@
 import React, {FC, useEffect} from 'react';
-import {useAppDispatch} from '../../hooks/redux';
+import {useAppDispatch, useAppSelector} from '../../hooks/redux';
 import {setIsModal} from '../../redux/store/actionCreator/actionCreatorModal';
 import {RenderPage} from '../renderPage';
 import {setArrayStart} from '../../redux/store/actionCreator/actionCreatorCurrentArray';
@@ -10,17 +10,13 @@ interface RenderStartProps {
   props?: any;
 }
 
-export const RenderStart: FC<RenderStartProps> = (...props) => {
+export const RenderStart: FC<RenderStartProps> = ({}) => {
+  const {arrayLength} = useAppSelector(reducer => reducer.currentArrayReducer);
+  const {imagePath} = useAppSelector(reducer => reducer.imageSlice);
+
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(
-      setArrayStart(
-        props[0].route.params.arrayLength,
-        props[0].route.params.imagePath,
-        setOriginLine,
-        dispatch,
-      ),
-    );
+    dispatch(setArrayStart(arrayLength, imagePath, setOriginLine, dispatch));
     dispatch(setIsModal(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

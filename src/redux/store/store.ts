@@ -4,6 +4,7 @@ import sequenceOfArrayReducer from './reducers/sequenceOfArraySlice';
 import modalReducer from './reducers/modalSlice';
 import positionReducer from './reducers/positionSlice';
 import themeReducer from './reducers/themeSlice';
+import imageSlice from './reducers/imageSlice';
 
 const rootReducer = combineReducers({
   currentArrayReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   modalReducer,
   positionReducer,
   themeReducer,
+  imageSlice,
 });
 
 export const setupStore = () => {

@@ -25,8 +25,15 @@ interface RenderPageProps {}
 export const RenderPage: FC<RenderPageProps> = ({}) => {
   const dispatch = useAppDispatch();
 
-  const {arrayCurrent, arrayRandomStart, nullItem, arrayLength, imagePath} =
-    useAppSelector(reducer => reducer.currentArrayReducer);
+  const {
+    arrayCurrent,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    arrayRandomStart,
+    nullItem,
+    arrayLength,
+  } = useAppSelector(reducer => reducer.currentArrayReducer);
+
+  const {imagePath} = useAppSelector(reducer => reducer.imageSlice);
 
   const {originLine, isOriginLine, currentLine} = useAppSelector(
     reducer => reducer.sequenceOfArrayReducer,
@@ -48,9 +55,10 @@ export const RenderPage: FC<RenderPageProps> = ({}) => {
   }, [isOriginLine]);
 
   const onRandomArray = () => {
-    arrayRandomStart.length > 0
-      ? dispatch(setArrayCurrent(arrayRandomStart, 'modal', true))
-      : dispatch(setArrayCurrent(randomArrayFunc([...arrayCurrent]), 'modal'));
+    // arrayRandomStart.length > 0
+    //   ? dispatch(setArrayCurrent(arrayRandomStart, 'modal', true))
+    //   :
+    dispatch(setArrayCurrent(randomArrayFunc([...arrayCurrent]), 'modal'));
   };
 
   const setPositionTargetNull = () => {

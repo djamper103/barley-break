@@ -8,9 +8,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import {PositionType, PuzzleRenderArray} from '../../../../types/puzzle';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
-import {PAZZLE_IMAGES_BY_KEYS} from '../../../../constants/images';
+
 import {COLORS} from '../../../../constants/colors';
 import {dw} from '../../../../utils/dimensions';
+import {IMAGES_3_BY_KEYS, IMAGES_4_BY_KEYS} from '../../../../constants/images';
 
 interface RenderComponentProps {
   data: PuzzleRenderArray;
@@ -68,7 +69,7 @@ export const RenderComponent: FC<RenderComponentProps> = ({
               id: data.id,
               x: pageX,
               y: pageY,
-              url: data.url,
+              path: data.path,
               height,
             });
         },
@@ -107,7 +108,7 @@ export const RenderComponent: FC<RenderComponentProps> = ({
             id: data.id,
             x: pageX,
             y: pageY,
-            url: data.url,
+            path: data.path,
             height,
           },
           value,
@@ -115,6 +116,11 @@ export const RenderComponent: FC<RenderComponentProps> = ({
       },
     );
   };
+
+  const sourceImage =
+    arrayLength === 3
+      ? IMAGES_3_BY_KEYS[`${imagePath}${data.id}`]
+      : IMAGES_4_BY_KEYS[`${imagePath}${data.id}`];
 
   return (
     <GestureDetector gesture={panGesture}>
@@ -133,7 +139,10 @@ export const RenderComponent: FC<RenderComponentProps> = ({
             {data.id}
           </Text>
         ) : (
-          <Image style={styles.image} source={PAZZLE_IMAGES_BY_KEYS[data.id]} />
+          <Image
+            style={[styles.image, arrayLength === 4 && styles.imageBig]}
+            source={sourceImage}
+          />
         )}
       </Animated.View>
     </GestureDetector>
@@ -176,5 +185,9 @@ const styles = StyleSheet.create({
     height: dw(112),
     // resizeMode: 'contain',
     backgroundColor: COLORS.TRANSPARENT,
+  },
+  imageBig: {
+    width: dw(94),
+    height: dw(94),
   },
 });
