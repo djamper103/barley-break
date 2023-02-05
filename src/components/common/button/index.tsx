@@ -4,7 +4,7 @@ import {dw} from '../../../utils/dimensions';
 
 interface ButtonContainerProps {
   text?: string;
-  containerStyle?: ViewStyle;
+  containerStyle?: any;
   buttonStyle?: ViewStyle;
   textStyle?: ViewStyle;
   onPress?: () => void;

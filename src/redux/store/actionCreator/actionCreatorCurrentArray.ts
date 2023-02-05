@@ -7,12 +7,9 @@ import {ModalSlice} from '../reducers/modalSlice';
 import {AppDispatch} from '../store';
 
 export const setArrayCurrent =
-  (array: any[], type?: string, isArrayRandomStart?: boolean) =>
-  (dispatch: AppDispatch) => {
+  (array: any[], type?: string) => (dispatch: AppDispatch) => {
     dispatch(ArrayCurrentSlice.actions.setArrayCurrent(array));
-    // isArrayRandomStart &&
-    //   dispatch(ArrayCurrentSlice.actions.setArrayRandomStart([]));
-    type === 'modal' && dispatch(ModalSlice.actions.setIsModal(false));
+    type === 'modal' && dispatch(ModalSlice.actions.setIsModalRandom(false));
   };
 
 export const setArrayStart =
@@ -21,6 +18,7 @@ export const setArrayStart =
     imagePath: string,
     setOriginLine: any,
     dispatchCurrent: (value: number[]) => void,
+    changeImage?: string,
   ) =>
   (dispatch: AppDispatch) => {
     const lineArray: any = [];
@@ -39,11 +37,6 @@ export const setArrayStart =
       }),
     );
     dispatch(ImageSlice.actions.setImage(imagePath));
-    // dispatch(
-    //   ArrayCurrentSlice.actions.setArrayRandomStart(
-    //     randomArrayFunc([...arrayGenerate]),
-    //   ),
-    // );
   };
 
 export const setNull = (value: Object) => (dispatch: AppDispatch) => {

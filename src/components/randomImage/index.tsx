@@ -2,7 +2,10 @@ import React, {FC, useEffect} from 'react';
 import {GameSize} from '../common/gameSize';
 import {sizeArrayImages} from '../../constants/common';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
-import {setIsImageComponent} from '../../redux/store/actionCreator/actionCreatorImage';
+import {
+  setIsImageChoose,
+  setIsImageComponent,
+} from '../../redux/store/actionCreator/actionCreatorImage';
 
 interface RandomImageGameProps {
   navigation?: any;
@@ -11,10 +14,13 @@ interface RandomImageGameProps {
 export const RandomImageGame: FC<RandomImageGameProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
 
-  const {isImageComponent} = useAppSelector(reducer => reducer.imageSlice);
+  const {isImageChoose, isImageComponent} = useAppSelector(
+    reducer => reducer.imageSlice,
+  );
 
   useEffect(() => {
-    isImageComponent && dispatch(setIsImageComponent(false));
+    isImageChoose && dispatch(setIsImageChoose(false));
+    !isImageComponent && dispatch(setIsImageComponent(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

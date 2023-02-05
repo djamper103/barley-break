@@ -5,6 +5,7 @@ import {IMAGES_BY_KEYS} from '../../constants/images';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
 import {
   setAmountArray,
+  setIsImageChoose,
   setIsImageComponent,
   setNumberOfImage,
 } from '../../redux/store/actionCreator/actionCreatorImage';
@@ -17,14 +18,14 @@ interface CategoriesProps {
 export const ChooseImage: FC<CategoriesProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
 
-  const {imageRandomAmount, imageAmountArray} = useAppSelector(
-    reducer => reducer.imageSlice,
-  );
+  const {imageRandomAmount, imageAmountArray, isImageComponent, isImageChoose} =
+    useAppSelector(reducer => reducer.imageSlice);
   const {isTheme} = useAppSelector(reducer => reducer.themeReducer);
 
   useEffect(() => {
     dispatch(setAmountArray(imageRandomAmount));
-    dispatch(setIsImageComponent(true));
+    !isImageChoose && dispatch(setIsImageChoose(true));
+    !isImageComponent && dispatch(setIsImageComponent(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

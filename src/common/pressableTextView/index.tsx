@@ -16,7 +16,7 @@ interface PressableTextViewProps {
   type?: string;
   imageIcon?: any;
   imageStyle?: ImageStyle;
-  containerStyle?: ViewStyle;
+  containerStyle?: any;
   containerThemeStyle?: ViewStyle;
   textStyle?: ViewStyle;
   textThemeStyle?: ViewStyle;

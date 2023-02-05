@@ -1,19 +1,19 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 interface ModalState {
-  isModal: boolean;
+  isModalRandom: boolean;
 }
 
 const initialState: ModalState = {
-  isModal: true,
+  isModalRandom: false,
 };
 
 export const ModalSlice = createSlice({
   name: 'modalSlice',
   initialState: initialState,
   reducers: {
-    setIsModal(state, action) {
-      state.isModal = action.payload;
+    setIsModalRandom(state, action) {
+      state.isModalRandom = action.payload;
     },
   },
 });

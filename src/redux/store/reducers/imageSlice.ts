@@ -6,6 +6,7 @@ interface ImageState {
   imageRandomAmount: number;
   imageAmountArray: number[];
   isImageComponent: boolean;
+  isImageChoose: boolean;
 }
 
 const initialState: ImageState = {
@@ -14,6 +15,7 @@ const initialState: ImageState = {
   imageRandomAmount: 4,
   imageAmountArray: [],
   isImageComponent: false,
+  isImageChoose: false,
 };
 
 export const ImageSlice = createSlice({
@@ -31,6 +33,9 @@ export const ImageSlice = createSlice({
     },
     setIsImageComponent(state, action) {
       state.isImageComponent = action.payload;
+    },
+    setIsImageChoose(state, action) {
+      state.isImageChoose = action.payload;
     },
   },
 });

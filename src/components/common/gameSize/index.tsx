@@ -24,23 +24,22 @@ export const GameSize: FC<GameSizeProps> = ({
   const dispatch = useAppDispatch();
 
   const {isTheme} = useAppSelector(reducer => reducer.themeReducer);
-  const {numberOfImage, isImageComponent} = useAppSelector(
+  const {numberOfImage, isImageChoose} = useAppSelector(
     reducer => reducer.imageSlice,
   );
 
   const onPress = (value: number) => {
     let numberOfImageLocal = randomInteger(1, 4);
-    isImageComponent === false &&
-      dispatch(setNumberOfImage(numberOfImageLocal));
+    isImageChoose === false && dispatch(setNumberOfImage(numberOfImageLocal));
     dispatch(setArrayLength(value));
     dispatch(
       setImage(
         imagePath === 'none'
           ? 'none'
-          : `${value}${isImageComponent ? numberOfImage : numberOfImageLocal}`,
+          : `${value}${isImageChoose ? numberOfImage : numberOfImageLocal}`,
       ),
     );
-    navigation.push('Render start');
+    navigation.push('Render start', {imagePathFirstFigure: value});
   };
   return (
     <View style={styles.container}>

@@ -1,9 +1,11 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Alert, FlatList, StyleSheet, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {randomArrayFunc} from '../../common/functions/randomArray';
 import {setArrayCurrentFunc} from '../../common/functions/setPositionArrayFunc';
 import {ModalContainer} from '../../common/modal';
+import {PressableTextView} from '../../common/pressableTextView';
+import {IMAGES_BY_KEYS} from '../../constants/images';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
 import {
   setArrayCurrent,
@@ -16,24 +18,26 @@ import {
 } from '../../redux/store/actionCreator/actionCreatorSequence';
 import {PositionType} from '../../types/puzzle';
 import {dh} from '../../utils/dimensions';
+import {BigImageComponent} from '../bigImageComponent';
 import {ButtonContainer} from '../common/button';
 
 import {RenderComponent} from './components/renderComponent';
 
-interface RenderPageProps {}
+interface RenderPageProps {
+  changeImageFunc?: () => void;
+}
 
-export const RenderPage: FC<RenderPageProps> = ({}) => {
+export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
   const dispatch = useAppDispatch();
 
-  const {
-    arrayCurrent,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    arrayRandomStart,
-    nullItem,
-    arrayLength,
-  } = useAppSelector(reducer => reducer.currentArrayReducer);
+  const {arrayCurrent, nullItem, arrayLength} = useAppSelector(
+    reducer => reducer.currentArrayReducer,
+  );
 
-  const {imagePath} = useAppSelector(reducer => reducer.imageSlice);
+  const {imagePath, numberOfImage, isImageComponent, isImageChoose} =
+    useAppSelector(reducer => reducer.imageSlice);
+
+  const {isTheme} = useAppSelector(reducer => reducer.themeReducer);
 
   const {originLine, isOriginLine, currentLine} = useAppSelector(
     reducer => reducer.sequenceOfArrayReducer,
@@ -41,7 +45,9 @@ export const RenderPage: FC<RenderPageProps> = ({}) => {
 
   const {positionTarget} = useAppSelector(reducer => reducer.positionReducer);
 
-  const {isModal} = useAppSelector(reducer => reducer.modalReducer);
+  const {isModalRandom} = useAppSelector(reducer => reducer.modalReducer);
+
+  const [isModalImageCurrent, setIsModalImageCurrent] = useState(false);
 
   useEffect(() => {
     if (currentLine.length > 0) {
@@ -55,9 +61,6 @@ export const RenderPage: FC<RenderPageProps> = ({}) => {
   }, [isOriginLine]);
 
   const onRandomArray = () => {
-    // arrayRandomStart.length > 0
-    //   ? dispatch(setArrayCurrent(arrayRandomStart, 'modal', true))
-    //   :
     dispatch(setArrayCurrent(randomArrayFunc([...arrayCurrent]), 'modal'));
   };
 
@@ -69,6 +72,9 @@ export const RenderPage: FC<RenderPageProps> = ({}) => {
     dispatch(setNull(value));
   };
 
+  const onImage = (value?: boolean) => {
+    setIsModalImageCurrent(value !== undefined ? value : false);
+  };
   const onPress = (data: PositionType, valueMove: any) => {
     setArrayCurrentFunc(
       arrayCurrent,
@@ -96,17 +102,52 @@ export const RenderPage: FC<RenderPageProps> = ({}) => {
       />
     );
   };
+
   return (
     <View>
-      {isModal && (
-        <ModalContainer isModal={isModal}>
+      {isModalRandom && (
+        <ModalContainer isModal={isModalRandom}>
           <ButtonContainer
             onPress={onRandomArray}
             text={'Random array'}
-            containerStyle={styles.containerModal}
+            containerStyle={[
+              styles.containerModal,
+              isTheme && styles.containerModalTheme,
+            ]}
           />
         </ModalContainer>
       )}
+      {isModalImageCurrent && (
+        <ModalContainer isModal={isModalImageCurrent} onPress={onImage}>
+          <PressableTextView
+            data={false}
+            isTheme={isTheme}
+            type={'image'}
+            imageIcon={IMAGES_BY_KEYS[numberOfImage]}
+            onPress={onImage}
+            containerStyle={[
+              styles.containerModal,
+              isTheme && styles.containerModalTheme,
+            ]}
+            imageStyle={styles.imageStyle}
+          />
+        </ModalContainer>
+      )}
+      <View style={styles.containerTop}>
+        {isImageComponent && (
+          <BigImageComponent
+            isTheme={isTheme}
+            imageIcon={IMAGES_BY_KEYS[numberOfImage]}
+            onPress={onImage}
+          />
+        )}
+        <View style={styles.containerTopRight}>
+          {isImageComponent && !isImageChoose && (
+            <ButtonContainer onPress={changeImageFunc} text={'Change image'} />
+          )}
+          <ButtonContainer onPress={onRandomArray} text={'Random array'} />
+        </View>
+      </View>
       <GestureHandlerRootView>
         <FlatList
           data={arrayCurrent}
@@ -118,7 +159,6 @@ export const RenderPage: FC<RenderPageProps> = ({}) => {
           contentContainerStyle={styles.container}
         />
       </GestureHandlerRootView>
-      <ButtonContainer onPress={onRandomArray} text={'Random array'} />
     </View>
   );
 };
@@ -127,7 +167,14 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: dh(150),
+    marginTop: dh(20),
+  },
+  containerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  containerTopRight: {
+    flexDirection: 'column',
   },
   containerModal: {
     backgroundColor: 'rgba(57, 50, 54, 0.4)',
@@ -135,5 +182,12 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  containerModalTheme: {
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+  },
+  imageStyle: {
+    width: '98%',
+    height: '40%',
   },
 });

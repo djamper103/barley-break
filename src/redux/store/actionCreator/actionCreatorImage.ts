@@ -20,3 +20,7 @@ export const setIsImageComponent =
   (value: boolean) => (dispatch: AppDispatch) => {
     dispatch(ImageSlice.actions.setIsImageComponent(value));
   };
+
+export const setIsImageChoose = (value: boolean) => (dispatch: AppDispatch) => {
+  dispatch(ImageSlice.actions.setIsImageChoose(value));
+};
