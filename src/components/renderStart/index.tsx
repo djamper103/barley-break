@@ -6,6 +6,7 @@ import {setArrayStart} from '../../redux/store/actionCreator/actionCreatorCurren
 import {setOriginLine} from '../../redux/store/actionCreator/actionCreatorSequence';
 import {randomInteger} from '../../common/functions/randomInteger';
 import {setNumberOfImage} from '../../redux/store/actionCreator/actionCreatorImage';
+import {setResetTimer} from '../../redux/store/actionCreator/actionCreatorTimer';
 
 interface RenderStartProps {
   route?: any;
@@ -23,6 +24,7 @@ export const RenderStart: FC<RenderStartProps> = (...props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const changeImageFunc = () => {
+    dispatch(setResetTimer());
     let numberOfImageLocal = randomInteger(1, 4);
     dispatch(
       setArrayStart(

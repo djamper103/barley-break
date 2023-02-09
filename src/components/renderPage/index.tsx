@@ -4,7 +4,6 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {randomArrayFunc} from '../../common/functions/randomArray';
 import {setArrayCurrentFunc} from '../../common/functions/setPositionArrayFunc';
 import {ModalContainer} from '../../common/modal';
-import {PressableTextView} from '../../common/pressableTextView';
 import {IMAGES_BY_KEYS} from '../../constants/images';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
 import {
@@ -16,12 +15,19 @@ import {
   setCurrentLine,
   setIsOriginLine,
 } from '../../redux/store/actionCreator/actionCreatorSequence';
+import {
+  setIsTimer,
+  setIsTimerStart,
+  setResetTimer,
+} from '../../redux/store/actionCreator/actionCreatorTimer';
 import {PositionType} from '../../types/puzzle';
-import {dh} from '../../utils/dimensions';
+import {dh, dw} from '../../utils/dimensions';
 import {BigImageComponent} from '../bigImageComponent';
 import {ButtonContainer} from '../common/button';
-
+import {TaimerComponent} from '../timer';
+import {ZoomImageComponent} from '../zoomImageComponent';
 import {RenderComponent} from './components/renderComponent';
+import {useIsFocused} from '@react-navigation/native';
 
 interface RenderPageProps {
   changeImageFunc?: () => void;
@@ -29,6 +35,8 @@ interface RenderPageProps {
 
 export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
   const dispatch = useAppDispatch();
+
+  const isFocused = useIsFocused();
 
   const {arrayCurrent, nullItem, arrayLength} = useAppSelector(
     reducer => reducer.currentArrayReducer,
@@ -47,6 +55,10 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
 
   const {isModalRandom} = useAppSelector(reducer => reducer.modalReducer);
 
+  const {isTimer, isTimerStart, isTimerPlug} = useAppSelector(
+    reducer => reducer.timerSlice,
+  );
+
   const [isModalImageCurrent, setIsModalImageCurrent] = useState(false);
 
   useEffect(() => {
@@ -57,11 +69,20 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
   }, [currentLine]);
 
   useEffect(() => {
-    isOriginLine && Alert.alert('Congratulation you won this game');
+    isOriginLine &&
+      (Alert.alert('Congratulation you won this game'),
+      dispatch(setIsTimer(false)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOriginLine]);
+
+  useEffect(() => {
+    !isFocused && dispatch(setIsTimer(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
 
   const onRandomArray = () => {
     dispatch(setArrayCurrent(randomArrayFunc([...arrayCurrent]), 'modal'));
+    resetTimer();
   };
 
   const setPositionTargetNull = () => {
@@ -75,6 +96,19 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
   const onImage = (value?: boolean) => {
     setIsModalImageCurrent(value !== undefined ? value : false);
   };
+
+  const resetTimer = () => {
+    dispatch(setResetTimer());
+  };
+
+  const startTimer = () => {
+    dispatch(setIsTimerStart(true));
+  };
+
+  const stopTimer = () => {
+    dispatch(setIsTimerStart(false));
+  };
+
   const onPress = (data: PositionType, valueMove: any) => {
     setArrayCurrentFunc(
       arrayCurrent,
@@ -104,35 +138,31 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
   };
 
   return (
-    <View>
-      {isModalRandom && (
-        <ModalContainer isModal={isModalRandom}>
-          <ButtonContainer
-            onPress={onRandomArray}
-            text={'Random array'}
-            containerStyle={[
-              styles.containerModal,
-              isTheme && styles.containerModalTheme,
-            ]}
-          />
-        </ModalContainer>
-      )}
-      {isModalImageCurrent && (
-        <ModalContainer isModal={isModalImageCurrent} onPress={onImage}>
-          <PressableTextView
-            data={false}
-            isTheme={isTheme}
-            type={'image'}
-            imageIcon={IMAGES_BY_KEYS[numberOfImage]}
-            onPress={onImage}
-            containerStyle={[
-              styles.containerModal,
-              isTheme && styles.containerModalTheme,
-            ]}
-            imageStyle={styles.imageStyle}
-          />
-        </ModalContainer>
-      )}
+    <GestureHandlerRootView>
+      <ModalContainer
+        isModal={isModalImageCurrent}
+        onPress={onImage}
+        containerStyle={[
+          styles.containerModal,
+          isTheme && styles.containerModalTheme,
+        ]}>
+        <ZoomImageComponent
+          imageIcon={IMAGES_BY_KEYS[numberOfImage]}
+          containerStyle={styles.containerZoomImage}
+        />
+      </ModalContainer>
+
+      <ModalContainer isModal={isModalRandom}>
+        <ButtonContainer
+          onPress={onRandomArray}
+          text={'Random array'}
+          containerStyle={[
+            styles.containerModal,
+            isTheme && styles.containerModalTheme,
+          ]}
+        />
+      </ModalContainer>
+
       <View style={styles.containerTop}>
         {isImageComponent && (
           <BigImageComponent
@@ -148,23 +178,29 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
           <ButtonContainer onPress={onRandomArray} text={'Random array'} />
         </View>
       </View>
-      <GestureHandlerRootView>
-        <FlatList
-          data={arrayCurrent}
-          renderItem={RenderItem}
-          keyExtractor={item => `${item.id}`}
-          showsVerticalScrollIndicator={false}
-          numColumns={arrayLength}
-          key={arrayLength}
-          contentContainerStyle={styles.container}
-        />
-      </GestureHandlerRootView>
-    </View>
+      <FlatList
+        data={arrayCurrent}
+        renderItem={RenderItem}
+        keyExtractor={item => `${item.id}`}
+        showsVerticalScrollIndicator={false}
+        numColumns={arrayLength}
+        key={arrayLength}
+        contentContainerStyle={styles.containerFlatList}
+      />
+      <TaimerComponent
+        isTimer={isTimer}
+        isTimerStart={isTimerStart}
+        isTimerPlug={isTimerPlug}
+        resetTimer={resetTimer}
+        startTimer={startTimer}
+        stopTimer={stopTimer}
+      />
+    </GestureHandlerRootView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  containerFlatList: {
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: dh(20),
@@ -186,8 +222,10 @@ const styles = StyleSheet.create({
   containerModalTheme: {
     backgroundColor: 'rgba(255, 255, 255, 0.4)',
   },
-  imageStyle: {
-    width: '98%',
-    height: '40%',
+  containerZoomImage: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: dw(400),
+    height: dh(300),
   },
 });

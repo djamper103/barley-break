@@ -8,7 +8,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import {PositionType, PuzzleRenderArray} from '../../../../types/puzzle';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
-
 import {COLORS} from '../../../../constants/colors';
 import {dw} from '../../../../utils/dimensions';
 import {IMAGES_3_BY_KEYS, IMAGES_4_BY_KEYS} from '../../../../constants/images';

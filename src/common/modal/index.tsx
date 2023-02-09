@@ -1,15 +1,17 @@
 import React, {FC} from 'react';
-import {Modal} from 'react-native';
+import {Modal, Pressable} from 'react-native';
 
 interface ModalContainerProps {
   children?: any;
   isModal?: boolean;
+  containerStyle?: any;
   onPress?: () => void;
 }
 
 export const ModalContainer: FC<ModalContainerProps> = ({
   children,
   isModal,
+  containerStyle,
   onPress,
 }) => {
   return (
@@ -17,8 +19,10 @@ export const ModalContainer: FC<ModalContainerProps> = ({
       animationType="fade"
       transparent={true}
       visible={isModal}
-      onRequestClose={onPress}>
-      {children}
+      onLayout={onPress}>
+      <Pressable style={containerStyle && containerStyle} onPressOut={onPress}>
+        {children}
+      </Pressable>
     </Modal>
   );
 };
