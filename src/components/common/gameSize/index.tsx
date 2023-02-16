@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useAppDispatch, useAppSelector} from '../../../hooks/redux';
-import {dh, dw} from '../../../utils/dimensions';
 import {setArrayLength} from '../../../redux/store/actionCreator/actionCreatorCurrentArray';
 import {
   setImage,
@@ -24,7 +23,7 @@ export const GameSize: FC<GameSizeProps> = ({
   const dispatch = useAppDispatch();
 
   const {isTheme} = useAppSelector(reducer => reducer.themeReducer);
-  const {numberOfImage, isImageChoose} = useAppSelector(
+  const {numberOfImage, isImageChoose, isImageComponent} = useAppSelector(
     reducer => reducer.imageSlice,
   );
 
@@ -39,10 +38,18 @@ export const GameSize: FC<GameSizeProps> = ({
           : `${value}${isImageChoose ? numberOfImage : numberOfImageLocal}`,
       ),
     );
-    navigation.push('Render start', {imagePathFirstFigure: value});
+    navigation.push('Render start', {
+      imagePathFirstFigure: value,
+      isStart: true,
+    });
   };
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        isImageComponent && styles.containerClasssicGame,
+      ]}>
       {arraySize.map((el: number) => {
         return (
           <PressableTextView
@@ -62,7 +69,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    paddingHorizontal: dw(32),
-    marginTop: dh(150),
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
+  containerClasssicGame: {
+    marginTop: '55%',
   },
 });

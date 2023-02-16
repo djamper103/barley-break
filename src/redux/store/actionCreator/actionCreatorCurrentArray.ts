@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {randomArrayFunc} from '../../../common/functions/randomArray';
-import {randomInteger} from '../../../common/functions/randomInteger';
 import {ArrayCurrentSlice} from '../reducers/arraySlice';
 import {ImageSlice} from '../reducers/imageSlice';
 import {ModalSlice} from '../reducers/modalSlice';
@@ -18,7 +15,6 @@ export const setArrayStart =
     imagePath: string,
     setOriginLine: any,
     dispatchCurrent: (value: number[]) => void,
-    changeImage?: string,
   ) =>
   (dispatch: AppDispatch) => {
     const lineArray: any = [];

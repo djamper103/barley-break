@@ -1,6 +1,9 @@
 import React, {FC, useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
-import {setIsModalRandom} from '../../redux/store/actionCreator/actionCreatorModal';
+import {
+  setIsModalEnd,
+  setIsModalRandom,
+} from '../../redux/store/actionCreator/actionCreatorModal';
 import {RenderPage} from '../renderPage';
 import {setArrayStart} from '../../redux/store/actionCreator/actionCreatorCurrentArray';
 import {setOriginLine} from '../../redux/store/actionCreator/actionCreatorSequence';
@@ -11,6 +14,7 @@ import {setResetTimer} from '../../redux/store/actionCreator/actionCreatorTimer'
 interface RenderStartProps {
   route?: any;
   props?: any;
+  navigation?: any;
 }
 
 export const RenderStart: FC<RenderStartProps> = (...props) => {
@@ -25,6 +29,7 @@ export const RenderStart: FC<RenderStartProps> = (...props) => {
   }, []);
   const changeImageFunc = () => {
     dispatch(setResetTimer());
+    dispatch(setIsModalEnd(false));
     let numberOfImageLocal = randomInteger(1, 4);
     dispatch(
       setArrayStart(
@@ -36,5 +41,10 @@ export const RenderStart: FC<RenderStartProps> = (...props) => {
     );
     dispatch(setNumberOfImage(numberOfImageLocal));
   };
-  return <RenderPage changeImageFunc={changeImageFunc} />;
+  return (
+    <RenderPage
+      navigation={props[0].navigation}
+      changeImageFunc={changeImageFunc}
+    />
+  );
 };

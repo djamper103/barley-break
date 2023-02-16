@@ -3,6 +3,8 @@ import {GameSize} from '../common/gameSize';
 import {sizeArrayClassic} from '../../constants/common';
 import {setIsImageComponent} from '../../redux/store/actionCreator/actionCreatorImage';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
+import {View} from 'react-native';
+import {height} from '../../utils/dimensions';
 
 interface ClassicGameProps {
   navigation?: any;
@@ -18,10 +20,12 @@ export const ClassicGame: FC<ClassicGameProps> = ({navigation}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isImageComponent]);
   return (
-    <GameSize
-      arraySize={sizeArrayClassic}
-      imagePath={'none'}
-      navigation={navigation}
-    />
+    <View style={{marginTop: height / 6}}>
+      <GameSize
+        arraySize={sizeArrayClassic}
+        imagePath={'none'}
+        navigation={navigation}
+      />
+    </View>
   );
 };

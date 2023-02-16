@@ -11,6 +11,5 @@ export const routesStack = [
   {name: 'Random image', component: RandomImageGame},
   {name: 'Choose image', component: ChooseImage},
   {name: 'Game size', component: GameSize},
-  // {name: 'Settings', component: Settings},
   {name: 'Render start', component: RenderStart},
 ];

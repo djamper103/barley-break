@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {Pressable, StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {COLORS} from '../../../constants/colors';
 import {dw} from '../../../utils/dimensions';
 
 interface ButtonContainerProps {
@@ -41,11 +42,13 @@ export const ButtonContainer: FC<ButtonContainerProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: 'green',
+    paddingHorizontal: 24,
+    paddingVertical: 10,
     justifyContent: 'center',
-    width: dw(240),
+    alignSelf: 'center',
+    backgroundColor: COLORS.CERISE_RED,
+    borderRadius: dw(20),
+    marginBottom: dw(10),
   },
   buttonLong: {
     paddingVertical: 10,
@@ -54,7 +57,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   text: {
-    color: 'white',
+    color: COLORS.WHITE,
     fontSize: 24,
     textAlign: 'center',
   },

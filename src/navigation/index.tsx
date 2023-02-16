@@ -1,9 +1,8 @@
-import {NavigationContainer} from '@react-navigation/native';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {TransitionSpec} from '@react-navigation/stack/lib/typescript/src/types';
 import React, {FC} from 'react';
-// import {StatusBar} from 'react-native';
-// import {Menu} from '../components/menu';
+import {StatusBar} from 'react-native';
 import {COLORS} from '../constants/colors';
 import {ARROW_LEFT_ICON} from '../constants/images';
 import {useAppDispatch, useAppSelector} from '../hooks/redux';
@@ -13,14 +12,9 @@ import {routesStack} from './routes';
 
 const Stack = createStackNavigator();
 const config: TransitionSpec = {
-  animation: 'spring',
+  animation: 'timing',
   config: {
-    stiffness: 1000,
-    damping: 500,
-    mass: 3,
-    overshootClamping: true,
-    restDisplacementThreshold: 0.01,
-    restSpeedThreshold: 0.01,
+    duration: 500,
   },
 };
 
@@ -35,18 +29,18 @@ export const NavigationContainerFC: FC = () => {
     dispatch(setIsTheme(isTheme));
   };
 
+  const MyTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: color,
+    },
+  };
+
   return (
-    <NavigationContainer>
-      {/* <StatusBar
-        backgroundColor={isTheme ? COLORS.CLOUD_BURST : COLORS.TRANSPARENT}
-      /> */}
-      {/* <StatusBar translucent={true} backgroundColor={COLORS.TRANSPARENT} /> */}
-      <Stack.Navigator
-        screenOptions={{
-          cardStyle: {
-            backgroundColor: color,
-          },
-        }}>
+    <NavigationContainer theme={MyTheme}>
+      <StatusBar backgroundColor={color} />
+      <Stack.Navigator>
         {routesStack.map(el => (
           <Stack.Screen
             name={el.name}
@@ -66,9 +60,6 @@ export const NavigationContainerFC: FC = () => {
                 open: config,
                 close: config,
               },
-              // cardStyle: {
-              //   backgroundColor: color,
-              // },
             }}
           />
         ))}

@@ -3,12 +3,12 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {dh, dw} from '../../utils/dimensions';
 import {COLORS} from '../../constants/colors';
 import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
-import {AnimatedCircleComponent} from '../animatedCircle';
 
 interface TaimerComponentProps {
   isTimer: boolean;
   isTimerStart: boolean | null;
   isTimerPlug: boolean | null;
+  isTheme?: boolean;
   buttonTextReset?: string;
   buttonTextStart?: string;
   buttonTextStop?: string;
@@ -22,6 +22,7 @@ export const TaimerComponent: FC<TaimerComponentProps> = ({
   isTimer = false,
   isTimerStart = false,
   isTimerPlug = false,
+  isTheme = false,
   buttonTextReset = 'Reset timer',
   buttonTextStart = 'Start timer',
   buttonTextStop = 'Stop timer',
@@ -75,30 +76,32 @@ export const TaimerComponent: FC<TaimerComponentProps> = ({
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      borderColor: withTiming(isAnimated ? COLORS.RED : COLORS.DUNE),
-      // opacity: withSpring(isAnimated ? 1 : 0),
+      borderColor: withTiming(isAnimated ? COLORS.CERISE_RED : COLORS.DUNE),
     };
   });
   return (
     <View style={styles.container}>
       <Animated.View style={[animatedStyle, styles.containerAnimate]}>
-        <Text style={styles.text}>
+        <Text style={[styles.text, isTheme && styles.textTheme]}>
           {minutes < 10 ? `0${minutes}` : minutes} :
           {seconds < 10 ? `0${seconds}` : seconds === 60 ? '00' : seconds}
         </Text>
       </Animated.View>
       <View style={styles.containerButton}>
-        <Pressable onPress={resetTimer} style={styles.button}>
-          <Text style={styles.text}>{buttonTextReset}</Text>
-        </Pressable>
         <Pressable onPress={startTimer} style={styles.button}>
-          <Text style={styles.text}>{buttonTextStart}</Text>
+          <Text style={[styles.text, styles.textButton]}>
+            {buttonTextStart}
+          </Text>
         </Pressable>
         <Pressable onPress={stopTimer} style={styles.button}>
-          <Text style={styles.text}>{buttonTextStop}</Text>
+          <Text style={[styles.text, styles.textButton]}>{buttonTextStop}</Text>
+        </Pressable>
+        <Pressable onPress={resetTimer} style={styles.button}>
+          <Text style={[styles.text, styles.textButton]}>
+            {buttonTextReset}
+          </Text>
         </Pressable>
       </View>
-      {/* <AnimatedCircleComponent progressValue={second} /> */}
     </View>
   );
 };
@@ -106,13 +109,11 @@ export const TaimerComponent: FC<TaimerComponentProps> = ({
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    width: dw(200),
-    height: dh(60),
     flexDirection: 'row',
-    marginLeft: 100,
-    marginTop: 10,
+    marginTop: dh(10),
   },
   containerButton: {
+    justifyContent: 'space-between',
     width: dw(250),
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -126,15 +127,25 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
-    fontSize: 20,
-    color: COLORS.DUNE,
+    fontSize: 24,
+    fontWeight: '400',
+    color: COLORS.BLACK,
+  },
+  textTheme: {
+    color: COLORS.WHITE,
+  },
+  textButton: {
+    fontSize: 16,
+    color: COLORS.WHITE,
+    fontWeight: '700',
   },
   button: {
-    width: dw(100),
-    height: dh(80),
+    paddingHorizontal: 24,
+    paddingVertical: 10,
     justifyContent: 'center',
     alignSelf: 'center',
-    backgroundColor: COLORS.GHOST,
+    backgroundColor: COLORS.CERISE_RED,
     borderRadius: 20,
+    marginBottom: 10,
   },
 });

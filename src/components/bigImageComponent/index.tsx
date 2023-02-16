@@ -22,6 +22,7 @@ export const BigImageComponent: FC<BigImageComponentProps> = ({
       isTheme={isTheme}
       type={'image'}
       imageIcon={imageIcon}
+      imageStyle={styles.image}
       onPress={onPress}
     />
   );
@@ -30,10 +31,12 @@ export const BigImageComponent: FC<BigImageComponentProps> = ({
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
+    width: dw(200),
+    height: dw(180),
   },
   image: {
-    width: dw(160),
-    height: dw(160),
+    width: dw(200),
+    height: dw(180),
     // resizeMode: 'contain',
     backgroundColor: COLORS.TRANSPARENT,
   },

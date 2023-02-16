@@ -3,7 +3,7 @@ import {
   PinchGestureHandler,
   PinchGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
-import {Image, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 import {dh, dw, height, width} from '../../utils/dimensions';
 import {COLORS} from '../../constants/colors';
 import Animated, {
@@ -32,11 +32,13 @@ export const ZoomImageComponent: FC<ZoomImageComponentProps> = ({
     useAnimatedGestureHandler<PinchGestureHandlerGestureEvent>({
       onActive: event => {
         scale.value = event.scale;
-        focalX.value = event.focalX;
-        focalY.value = event.focalY;
+        focalX.value = event.focalX - width / 2;
+        focalY.value = event.focalY - height / 5;
       },
       onEnd: () => {
         scale.value = withTiming(1);
+        focalX.value = withTiming(0);
+        focalY.value = withTiming(0);
       },
     });
 
@@ -45,34 +47,25 @@ export const ZoomImageComponent: FC<ZoomImageComponentProps> = ({
       transform: [
         {translateX: focalX.value},
         {translateY: focalY.value},
-        {translateX: -width / 2},
-        {translateY: -height / 2},
         {scale: scale.value},
-        {translateX: -focalX.value},
-        {translateY: -focalY.value},
-        {translateX: width / 2},
-        {translateY: height / 2},
       ],
     };
   });
 
   return (
     <PinchGestureHandler onGestureEvent={pinchHandler}>
-      <TouchableWithoutFeedback>
-        <Animated.View
-          style={[styles.container, containerStyle && containerStyle]}>
-          <AnimatedImage style={[rStyle, styles.image]} source={imageIcon} />
-        </Animated.View>
-      </TouchableWithoutFeedback>
+      <Animated.View
+        style={[styles.container, containerStyle && containerStyle]}>
+        <AnimatedImage style={[rStyle, styles.image]} source={imageIcon} />
+      </Animated.View>
     </PinchGestureHandler>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
     width: dw(400),
-    height: dh(250),
+    height: dh(300),
   },
   image: {
     width: '100%',

@@ -2,10 +2,12 @@ import {createSlice} from '@reduxjs/toolkit';
 
 interface ModalState {
   isModalRandom: boolean;
+  isModalEnd: boolean;
 }
 
 const initialState: ModalState = {
   isModalRandom: false,
+  isModalEnd: false,
 };
 
 export const ModalSlice = createSlice({
@@ -14,6 +16,9 @@ export const ModalSlice = createSlice({
   reducers: {
     setIsModalRandom(state, action) {
       state.isModalRandom = action.payload;
+    },
+    setIsModalEnd(state, action) {
+      state.isModalEnd = action.payload;
     },
   },
 });

@@ -28,10 +28,20 @@ export const HeaderNavigation: FC<HeaderNavigationProps> = (...props) => {
   const onPressTheme = () => {
     props[0].setTheme();
   };
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={onPressBack}>
-        {props[0].componentName !== 'Menu' && (
+    <View
+      style={[
+        styles.container,
+        props[0].componentName !== 'Menu' && styles.containerTheme,
+      ]}>
+      {props[0].componentName !== 'Menu' && (
+        <TouchableOpacity
+          onPress={onPressBack}
+          style={[
+            styles.containerBack,
+            props[0].isTheme && styles.containerBackTheme,
+          ]}>
           <Image
             source={props[0].leftIcon}
             style={[
@@ -40,8 +50,8 @@ export const HeaderNavigation: FC<HeaderNavigationProps> = (...props) => {
               props[0].leftIconStyle && props[0].leftIconStyle,
             ]}
           />
-        )}
-      </TouchableOpacity>
+        </TouchableOpacity>
+      )}
       <SwitchComponent isTheme={props[0].isTheme} onPress={onPressTheme} />
     </View>
   );
@@ -49,14 +59,24 @@ export const HeaderNavigation: FC<HeaderNavigationProps> = (...props) => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: dw(10),
+    paddingVertical: dw(10),
+    paddingHorizontal: dw(10),
+  },
+  containerTheme: {
+    justifyContent: 'space-between',
+  },
+  containerBack: {
+    borderRadius: dw(50),
+  },
+  containerBackTheme: {
+    // backgroundColor: COLORS.OXFORD_BLUE,
   },
   image: {
     resizeMode: 'contain',
-    backgroundColor: COLORS.TRANSPARENT,
+    tintColor: COLORS.DUNE,
   },
   imageTheme: {
     tintColor: COLORS.WHITE,

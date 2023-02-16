@@ -1,9 +1,9 @@
 import {Dimensions} from 'react-native';
 
-export const {width, height} = Dimensions.get('window');
+export const {width, height, fontScale} = Dimensions.get('window');
 
-const guidelineBaseWidth = 412;
-const guidelineBaseHeight = 869;
+const baseWidth = 400;
+const baseHeight = 800;
 
-export const dw = (size: number) => (width / guidelineBaseWidth) * size;
-export const dh = (size: number) => (height / guidelineBaseHeight) * size;
+export const dw = (size: number) => ((width / baseWidth) * size) / fontScale;
+export const dh = (size: number) => ((height / baseHeight) * size) / fontScale;

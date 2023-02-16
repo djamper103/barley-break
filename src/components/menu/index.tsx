@@ -36,11 +36,11 @@ const styles = StyleSheet.create({
     marginTop: dh(200),
   },
   containerButton: {
-    margin: dh(10),
+    margin: dh(12),
   },
   text: {
     color: COLORS.DUNE,
-    fontSize: 28,
+    fontSize: 32,
     textAlign: 'center',
     fontWeight: '400',
   },

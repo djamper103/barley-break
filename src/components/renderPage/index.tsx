@@ -1,10 +1,8 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Alert, FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {randomArrayFunc} from '../../common/functions/randomArray';
 import {setArrayCurrentFunc} from '../../common/functions/setPositionArrayFunc';
-import {ModalContainer} from '../../common/modal';
-import {IMAGES_BY_KEYS} from '../../constants/images';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
 import {
   setArrayCurrent,
@@ -21,19 +19,23 @@ import {
   setResetTimer,
 } from '../../redux/store/actionCreator/actionCreatorTimer';
 import {PositionType} from '../../types/puzzle';
-import {dh, dw} from '../../utils/dimensions';
-import {BigImageComponent} from '../bigImageComponent';
-import {ButtonContainer} from '../common/button';
 import {TaimerComponent} from '../timer';
-import {ZoomImageComponent} from '../zoomImageComponent';
 import {RenderComponent} from './components/renderComponent';
 import {useIsFocused} from '@react-navigation/native';
+import {RenderPageHeader} from './components/header';
+import {RenderPageModal} from './components/modal';
+import {setIsModalEnd} from '../../redux/store/actionCreator/actionCreatorModal';
+import {dh} from '../../utils/dimensions';
 
 interface RenderPageProps {
+  navigation?: any;
   changeImageFunc?: () => void;
 }
 
-export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
+export const RenderPage: FC<RenderPageProps> = ({
+  navigation,
+  changeImageFunc,
+}) => {
   const dispatch = useAppDispatch();
 
   const isFocused = useIsFocused();
@@ -53,7 +55,9 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
 
   const {positionTarget} = useAppSelector(reducer => reducer.positionReducer);
 
-  const {isModalRandom} = useAppSelector(reducer => reducer.modalReducer);
+  const {isModalRandom, isModalEnd} = useAppSelector(
+    reducer => reducer.modalReducer,
+  );
 
   const {isTimer, isTimerStart, isTimerPlug} = useAppSelector(
     reducer => reducer.timerSlice,
@@ -69,9 +73,7 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
   }, [currentLine]);
 
   useEffect(() => {
-    isOriginLine &&
-      (Alert.alert('Congratulation you won this game'),
-      dispatch(setIsTimer(false)));
+    isOriginLine && isModalEndFunc();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOriginLine]);
 
@@ -82,6 +84,7 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
 
   const onRandomArray = () => {
     dispatch(setArrayCurrent(randomArrayFunc([...arrayCurrent]), 'modal'));
+    dispatch(setIsModalEnd(false));
     resetTimer();
   };
 
@@ -93,8 +96,8 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
     dispatch(setNull(value));
   };
 
-  const onImage = (value?: boolean) => {
-    setIsModalImageCurrent(value !== undefined ? value : false);
+  const modalImageFunc = () => {
+    setIsModalImageCurrent(!isModalImageCurrent);
   };
 
   const resetTimer = () => {
@@ -122,6 +125,15 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
     );
   };
 
+  const goToMainFunc = () => {
+    isModalEndFunc();
+    navigation.push('Menu');
+  };
+
+  const isModalEndFunc = () => {
+    dispatch(setIsModalEnd(!isModalEnd));
+  };
+
   const RenderItem: any = (data: any) => {
     return (
       <RenderComponent
@@ -139,45 +151,27 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
 
   return (
     <GestureHandlerRootView>
-      <ModalContainer
-        isModal={isModalImageCurrent}
-        onPress={onImage}
-        containerStyle={[
-          styles.containerModal,
-          isTheme && styles.containerModalTheme,
-        ]}>
-        <ZoomImageComponent
-          imageIcon={IMAGES_BY_KEYS[numberOfImage]}
-          containerStyle={styles.containerZoomImage}
-        />
-      </ModalContainer>
-
-      <ModalContainer isModal={isModalRandom}>
-        <ButtonContainer
-          onPress={onRandomArray}
-          text={'Random array'}
-          containerStyle={[
-            styles.containerModal,
-            isTheme && styles.containerModalTheme,
-          ]}
-        />
-      </ModalContainer>
-
-      <View style={styles.containerTop}>
-        {isImageComponent && (
-          <BigImageComponent
-            isTheme={isTheme}
-            imageIcon={IMAGES_BY_KEYS[numberOfImage]}
-            onPress={onImage}
-          />
-        )}
-        <View style={styles.containerTopRight}>
-          {isImageComponent && !isImageChoose && (
-            <ButtonContainer onPress={changeImageFunc} text={'Change image'} />
-          )}
-          <ButtonContainer onPress={onRandomArray} text={'Random array'} />
-        </View>
-      </View>
+      <RenderPageModal
+        isTheme={isTheme}
+        isModalRandom={isModalRandom}
+        isModalEnd={isModalEnd}
+        isModalImageCurrent={isModalImageCurrent}
+        numberOfImage={numberOfImage}
+        onRandomArray={onRandomArray}
+        modalImageFunc={modalImageFunc}
+        changeImageFunc={changeImageFunc}
+        goToMainFunc={goToMainFunc}
+        isModalEndFunc={isModalEndFunc}
+      />
+      <RenderPageHeader
+        isImageChoose={isImageChoose}
+        isImageComponent={isImageComponent}
+        isTheme={isTheme}
+        numberOfImage={numberOfImage}
+        changeImageFunc={changeImageFunc}
+        modalImageFunc={modalImageFunc}
+        onRandomArray={onRandomArray}
+      />
       <FlatList
         data={arrayCurrent}
         renderItem={RenderItem}
@@ -185,12 +179,16 @@ export const RenderPage: FC<RenderPageProps> = ({changeImageFunc}) => {
         showsVerticalScrollIndicator={false}
         numColumns={arrayLength}
         key={arrayLength}
-        contentContainerStyle={styles.containerFlatList}
+        contentContainerStyle={[
+          styles.containerFlatList,
+          imagePath === 'none' && styles.containerNone,
+        ]}
       />
       <TaimerComponent
         isTimer={isTimer}
         isTimerStart={isTimerStart}
         isTimerPlug={isTimerPlug}
+        isTheme={isTheme}
         resetTimer={resetTimer}
         startTimer={startTimer}
         stopTimer={stopTimer}
@@ -203,29 +201,8 @@ const styles = StyleSheet.create({
   containerFlatList: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: dh(20),
   },
-  containerTop: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  containerTopRight: {
-    flexDirection: 'column',
-  },
-  containerModal: {
-    backgroundColor: 'rgba(57, 50, 54, 0.4)',
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  containerModalTheme: {
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
-  },
-  containerZoomImage: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: dw(400),
-    height: dh(300),
+  containerNone: {
+    marginVertical: dh(30),
   },
 });

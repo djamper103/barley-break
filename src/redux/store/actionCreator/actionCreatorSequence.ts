@@ -11,7 +11,12 @@ export const setCurrentLine =
   };
 
 export const setIsOriginLine =
-  (originLine: number[], currentLine: number[]) => (dispatch: AppDispatch) => {
-    const result = JSON.stringify(originLine) === JSON.stringify(currentLine);
-    dispatch(SequenceOfArraySlice.actions.setIsOriginLine(result));
+  (originLine: number[], currentLine: number[], IsOrigin?: boolean) =>
+  (dispatch: AppDispatch) => {
+    if (IsOrigin) {
+      dispatch(SequenceOfArraySlice.actions.setIsOriginLine(false));
+    } else {
+      const result = JSON.stringify(originLine) === JSON.stringify(currentLine);
+      dispatch(SequenceOfArraySlice.actions.setIsOriginLine(result));
+    }
   };

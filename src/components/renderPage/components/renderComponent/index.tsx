@@ -150,27 +150,25 @@ export const RenderComponent: FC<RenderComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: dw(112),
-    height: dw(112),
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  containerSmall: {
-    width: dw(94),
-    height: dw(94),
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  containerNone: {
-    backgroundColor: COLORS.CLOUD_BURST,
-  },
-  containerAverage: {
-    width: dw(74),
-    height: dw(74),
+    width: dw(125),
+    height: dw(125),
   },
   containerBig: {
-    width: dw(64),
-    height: dw(64),
+    width: dw(65),
+    height: dw(65),
+  },
+  containerAverage: {
+    width: dw(75),
+    height: dw(75),
+  },
+  containerSmall: {
+    width: dw(95),
+    height: dw(95),
+  },
+  containerNone: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: COLORS.BISCAY,
   },
   text: {
     fontSize: 18,
@@ -180,13 +178,13 @@ const styles = StyleSheet.create({
     color: 'transparent',
   },
   image: {
-    width: dw(112),
-    height: dw(112),
+    width: dw(125),
+    height: dw(125),
     // resizeMode: 'contain',
     backgroundColor: COLORS.TRANSPARENT,
   },
   imageBig: {
-    width: dw(94),
-    height: dw(94),
+    width: dw(95),
+    height: dw(95),
   },
 });

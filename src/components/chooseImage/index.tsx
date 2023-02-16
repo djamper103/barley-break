@@ -9,7 +9,7 @@ import {
   setIsImageComponent,
   setNumberOfImage,
 } from '../../redux/store/actionCreator/actionCreatorImage';
-import {dh, dw} from '../../utils/dimensions';
+import {dw, height} from '../../utils/dimensions';
 
 interface CategoriesProps {
   navigation?: any;
@@ -31,7 +31,7 @@ export const ChooseImage: FC<CategoriesProps> = ({navigation}) => {
 
   const onPress = (value: {id: number}) => {
     dispatch(setNumberOfImage(value.id));
-    navigation.push('Game size');
+    navigation.push('Game size', {type: 'wadw'});
   };
   return (
     <View style={styles.container}>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    paddingHorizontal: dw(20),
-    marginTop: dh(150),
+    paddingHorizontal: dw(10),
+    marginTop: height / 5.5,
   },
 });
