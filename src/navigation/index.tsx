@@ -23,6 +23,8 @@ export const NavigationContainerFC: FC = () => {
 
   const color = isTheme ? COLORS.BLACK : COLORS.WHITE;
 
+  const barStyle = isTheme ? 'light-content' : 'dark-content';
+
   const dispatch = useAppDispatch();
 
   const setTheme = () => {
@@ -39,7 +41,7 @@ export const NavigationContainerFC: FC = () => {
 
   return (
     <NavigationContainer theme={MyTheme}>
-      <StatusBar backgroundColor={color} />
+      <StatusBar barStyle={barStyle} backgroundColor={color} />
       <Stack.Navigator>
         {routesStack.map(el => (
           <Stack.Screen

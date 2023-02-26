@@ -1,13 +1,13 @@
 import React, {FC} from 'react';
-import {Pressable, StyleSheet, Text, View, ViewStyle} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../../../constants/colors';
-import {dw} from '../../../utils/dimensions';
+import {height, width} from '../../../utils/dimensions';
 
 interface ButtonContainerProps {
   text?: string;
   containerStyle?: any;
-  buttonStyle?: ViewStyle;
-  textStyle?: ViewStyle;
+  buttonStyle?: any;
+  textStyle?: any;
   onPress?: () => void;
 }
 
@@ -22,19 +22,8 @@ export const ButtonContainer: FC<ButtonContainerProps> = ({
     <View style={containerStyle && containerStyle}>
       <Pressable
         onPress={onPress}
-        style={[
-          styles.button,
-          buttonStyle && buttonStyle,
-          text.length > 10 && styles.buttonLong,
-        ]}>
-        <Text
-          style={[
-            styles.text,
-            textStyle && textStyle,
-            text.length > 10 && styles.textLong,
-          ]}>
-          {text}
-        </Text>
+        style={[styles.button, buttonStyle && buttonStyle]}>
+        <Text style={[styles.text, textStyle && textStyle]}>{text}</Text>
       </Pressable>
     </View>
   );
@@ -42,19 +31,11 @@ export const ButtonContainer: FC<ButtonContainerProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    paddingHorizontal: 24,
-    paddingVertical: 10,
+    paddingHorizontal: width / 20,
+    paddingVertical: height / 80,
     justifyContent: 'center',
-    alignSelf: 'center',
     backgroundColor: COLORS.CERISE_RED,
-    borderRadius: dw(20),
-    marginBottom: dw(10),
-  },
-  buttonLong: {
-    paddingVertical: 10,
-  },
-  textLong: {
-    fontSize: 20,
+    borderRadius: 20,
   },
   text: {
     color: COLORS.WHITE,

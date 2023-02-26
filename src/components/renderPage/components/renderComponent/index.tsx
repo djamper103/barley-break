@@ -9,8 +9,8 @@ import Animated, {
 import {PositionType, PuzzleRenderArray} from '../../../../types/puzzle';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import {COLORS} from '../../../../constants/colors';
-import {dw} from '../../../../utils/dimensions';
 import {IMAGES_3_BY_KEYS, IMAGES_4_BY_KEYS} from '../../../../constants/images';
+import {CELL_WIDTH, dw} from '../../../../utils/dimensions';
 
 interface RenderComponentProps {
   data: PuzzleRenderArray;
@@ -18,8 +18,8 @@ interface RenderComponentProps {
   positionTarget: any;
   imagePath: string;
   arrayLength: number;
+  withSpringOptions?: Object;
   onPress: (data: PositionType, value: any) => void;
-  setPositionTargetNull: () => void;
   setPositionNull: (value: PositionType) => void;
 }
 
@@ -29,8 +29,11 @@ export const RenderComponent: FC<RenderComponentProps> = ({
   positionTarget,
   imagePath,
   arrayLength,
+  withSpringOptions = {
+    damping: 11,
+    stiffness: 50,
+  },
   onPress,
-  setPositionTargetNull,
   setPositionNull,
 }) => {
   const offsetX = useSharedValue(0);
@@ -46,7 +49,6 @@ export const RenderComponent: FC<RenderComponentProps> = ({
       positionTarget.positionType === 'x'
         ? (offsetX.value = positionTarget.x)
         : (offsetY.value = positionTarget.y);
-      setPositionTargetNull();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [positionTarget]);
@@ -80,8 +82,10 @@ export const RenderComponent: FC<RenderComponentProps> = ({
     return {
       opacity: isNullValue ? 0 : 1,
       transform: [
-        {translateY: withSpring(offsetY.value)},
-        {translateX: withSpring(offsetX.value)},
+        {
+          translateY: withSpring(offsetY.value, withSpringOptions),
+        },
+        {translateX: withSpring(offsetX.value, withSpringOptions)},
       ],
     };
   });
@@ -102,16 +106,17 @@ export const RenderComponent: FC<RenderComponentProps> = ({
         pageX: number,
         pageY: number,
       ) => {
-        onPress(
-          {
-            id: data.id,
-            x: pageX,
-            y: pageY,
-            path: data.path,
-            height,
-          },
-          value,
-        );
+        positionTarget.id === undefined &&
+          onPress(
+            {
+              id: data.id,
+              x: pageX,
+              y: pageY,
+              path: data.path,
+              height,
+            },
+            value,
+          );
       },
     );
   };
@@ -138,10 +143,7 @@ export const RenderComponent: FC<RenderComponentProps> = ({
             {data.id}
           </Text>
         ) : (
-          <Image
-            style={[styles.image, arrayLength === 4 && styles.imageBig]}
-            source={sourceImage}
-          />
+          <Image style={styles.image} source={sourceImage} />
         )}
       </Animated.View>
     </GestureDetector>
@@ -150,20 +152,20 @@ export const RenderComponent: FC<RenderComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: dw(125),
-    height: dw(125),
+    width: CELL_WIDTH(3, dw(10)),
+    height: CELL_WIDTH(3, dw(10)),
   },
   containerBig: {
-    width: dw(65),
-    height: dw(65),
+    width: CELL_WIDTH(6, dw(10)),
+    height: CELL_WIDTH(6, dw(10)),
   },
   containerAverage: {
-    width: dw(75),
-    height: dw(75),
+    width: CELL_WIDTH(5, dw(10)),
+    height: CELL_WIDTH(5, dw(10)),
   },
   containerSmall: {
-    width: dw(95),
-    height: dw(95),
+    width: CELL_WIDTH(4, dw(10)),
+    height: CELL_WIDTH(4, dw(10)),
   },
   containerNone: {
     justifyContent: 'center',
@@ -178,13 +180,9 @@ const styles = StyleSheet.create({
     color: 'transparent',
   },
   image: {
-    width: dw(125),
-    height: dw(125),
+    width: '100%',
+    height: '100%',
     // resizeMode: 'contain',
     backgroundColor: COLORS.TRANSPARENT,
-  },
-  imageBig: {
-    width: dw(95),
-    height: dw(95),
   },
 });

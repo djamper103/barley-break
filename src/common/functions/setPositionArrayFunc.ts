@@ -29,7 +29,6 @@ export const setArrayCurrentFunc = (
     Math.abs(valueMove.translationX) > Math.abs(valueMove.translationY)
       ? 'x'
       : 'y';
-
   if (countLineTarget === countLineNull) {
     if (rowNull + 1 === rowTarget || rowNull - 1 === rowTarget) {
       if (

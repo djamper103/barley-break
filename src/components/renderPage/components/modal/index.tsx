@@ -1,17 +1,10 @@
 import React, {FC} from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {StyleSheet} from 'react-native';
 import {ModalContainer} from '../../../../common/modal';
 import {COLORS} from '../../../../constants/colors';
-import {IMAGES_BY_KEYS} from '../../../../constants/images';
-import {dw} from '../../../../utils/dimensions';
 import {ButtonContainer} from '../../../common/button';
-import {ZoomImageComponent} from '../../../zoomImageComponent';
+import {ModalEnd} from './components/zoomEnd';
+import {ZoomModal} from './components/zoomModal';
 
 interface RenderPageHeaderProps {
   isModalImageCurrent?: boolean;
@@ -20,6 +13,8 @@ interface RenderPageHeaderProps {
   isTheme?: boolean;
   numberOfImage: number;
   changeImageFunc: any;
+  seconds?: number;
+  minutes?: number;
   modalImageFunc: () => void;
   onRandomArray: () => void;
   goToMainFunc: () => void;
@@ -27,11 +22,13 @@ interface RenderPageHeaderProps {
 }
 
 export const RenderPageModal: FC<RenderPageHeaderProps> = ({
-  isModalImageCurrent = false,
-  isModalRandom = false,
-  isModalEnd = false,
-  numberOfImage = 1,
+  isModalImageCurrent,
+  isModalRandom,
+  isModalEnd,
+  numberOfImage,
   changeImageFunc,
+  seconds,
+  minutes,
   modalImageFunc,
   onRandomArray,
   goToMainFunc,
@@ -39,60 +36,38 @@ export const RenderPageModal: FC<RenderPageHeaderProps> = ({
 }) => {
   return (
     <>
-      <ModalContainer isModal={isModalImageCurrent}>
-        <GestureHandlerRootView>
-          <Pressable style={styles.containerModal} onPress={modalImageFunc}>
-            <TouchableWithoutFeedback>
-              <View>
-                <ZoomImageComponent imageIcon={IMAGES_BY_KEYS[numberOfImage]} />
-              </View>
-            </TouchableWithoutFeedback>
-          </Pressable>
-        </GestureHandlerRootView>
-      </ModalContainer>
+      <ZoomModal
+        numberOfImage={numberOfImage}
+        isModalImageCurrent={isModalImageCurrent}
+        modalImageFunc={modalImageFunc}
+      />
 
       <ModalContainer isModal={isModalRandom}>
         <ButtonContainer
           onPress={onRandomArray}
           text={'Random array'}
-          containerStyle={[styles.containerModal]}
+          containerStyle={[styles.container]}
         />
       </ModalContainer>
 
-      <ModalContainer isModal={isModalEnd} onPress={isModalEndFunc}>
-        <View style={styles.containerModalEnd}>
-          <ButtonContainer
-            onPress={changeImageFunc}
-            text={'New game'}
-            containerStyle={[styles.containerButtonEnd]}
-          />
-          <ButtonContainer
-            onPress={goToMainFunc}
-            text={'Menu'}
-            containerStyle={[styles.containerButtonEnd]}
-          />
-        </View>
-      </ModalContainer>
+      <ModalEnd
+        isModalEnd={isModalEnd}
+        seconds={seconds}
+        minutes={minutes}
+        isModalEndFunc={isModalEndFunc}
+        changeImageFunc={changeImageFunc}
+        goToMainFunc={goToMainFunc}
+      />
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  containerModal: {
+  container: {
     backgroundColor: COLORS.BISCAY_OPACITY_04,
     width: '100%',
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  containerModalEnd: {
-    backgroundColor: COLORS.BISCAY_OPACITY_04,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    width: '100%',
-    height: '100%',
-    paddingHorizontal: dw(50),
-  },
-  containerButtonEnd: {},
 });

@@ -13,4 +13,5 @@ export const arrayMenu: string[] = [
   'Classic game',
   'Random image',
   'Choose image',
+  'Close app',
 ];

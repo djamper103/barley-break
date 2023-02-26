@@ -26,9 +26,6 @@ export const ArrayCurrentSlice = createSlice({
           (state.nullItem = action.payload.nullItem),
           (state.arrayLength = action.payload.arrayLength));
     },
-    // setArrayRandomStart(state, action) {
-    //   state.arrayRandomStart = action.payload;
-    // },
     setNull(state, action) {
       state.nullItem = action.payload;
     },

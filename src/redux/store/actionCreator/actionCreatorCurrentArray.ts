@@ -1,3 +1,4 @@
+import {randomArrayFunc} from '../../../common/functions/randomArray';
 import {ArrayCurrentSlice} from '../reducers/arraySlice';
 import {ImageSlice} from '../reducers/imageSlice';
 import {ModalSlice} from '../reducers/modalSlice';
@@ -15,6 +16,7 @@ export const setArrayStart =
     imagePath: string,
     setOriginLine: any,
     dispatchCurrent: (value: number[]) => void,
+    type?: string,
   ) =>
   (dispatch: AppDispatch) => {
     const lineArray: any = [];
@@ -24,14 +26,28 @@ export const setArrayStart =
         lineArray.push(index);
         return {id: index, path: `${imagePath}${index}`};
       });
+
     dispatchCurrent(setOriginLine(lineArray));
-    dispatch(
-      ArrayCurrentSlice.actions.setArrayCurrent({
-        array: arrayGenerate,
-        nullItem: arrayGenerate[arrayGenerate.length - 1],
-        arrayLength,
-      }),
-    );
+
+    if (type !== undefined && type === 'new image') {
+      const newImage = randomArrayFunc([...arrayGenerate]);
+      dispatch(
+        ArrayCurrentSlice.actions.setArrayCurrent({
+          array: newImage,
+          nullItem: newImage[newImage.length - 1],
+          arrayLength,
+        }),
+      );
+    } else {
+      dispatch(
+        ArrayCurrentSlice.actions.setArrayCurrent({
+          array: arrayGenerate,
+          nullItem: arrayGenerate[arrayGenerate.length - 1],
+          arrayLength,
+        }),
+      );
+    }
+
     dispatch(ImageSlice.actions.setImage(imagePath));
   };
 

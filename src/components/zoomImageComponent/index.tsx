@@ -4,7 +4,7 @@ import {
   PinchGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
 import {Image, StyleSheet} from 'react-native';
-import {dh, dw, height, width} from '../../utils/dimensions';
+import {height, width} from '../../utils/dimensions';
 import {COLORS} from '../../constants/colors';
 import Animated, {
   useAnimatedGestureHandler,
@@ -64,13 +64,14 @@ export const ZoomImageComponent: FC<ZoomImageComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: dw(400),
-    height: dh(300),
+    width: width,
+    height: height / 3,
+    paddingHorizontal: '1%',
   },
   image: {
     width: '100%',
     height: '100%',
-    // resizeMode: 'contain',
+    resizeMode: 'contain',
     backgroundColor: COLORS.TRANSPARENT,
   },
 });

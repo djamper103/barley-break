@@ -1,14 +1,17 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {dh, dw} from '../../utils/dimensions';
+import {StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../../constants/colors';
 import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated';
+import {ButtonContainer} from '../common/button';
+import {height, width} from '../../utils/dimensions';
 
 interface TaimerComponentProps {
   isTimer: boolean;
   isTimerStart: boolean | null;
   isTimerPlug: boolean | null;
   isTheme?: boolean;
+  seconds?: number;
+  minutes?: number;
   buttonTextReset?: string;
   buttonTextStart?: string;
   buttonTextStop?: string;
@@ -16,6 +19,8 @@ interface TaimerComponentProps {
   resetTimer: () => void;
   startTimer: () => void;
   stopTimer: () => void;
+  setSeconds: (value: any) => void;
+  setMinutes: (value: any) => void;
 }
 
 export const TaimerComponent: FC<TaimerComponentProps> = ({
@@ -23,16 +28,20 @@ export const TaimerComponent: FC<TaimerComponentProps> = ({
   isTimerStart = false,
   isTimerPlug = false,
   isTheme = false,
+  seconds = 0,
+  minutes = 0,
   buttonTextReset = 'Reset timer',
   buttonTextStart = 'Start timer',
   buttonTextStop = 'Stop timer',
   resetTimer,
   startTimer,
   stopTimer,
+  setSeconds,
+  setMinutes,
 }) => {
   const [stateInterval, setStateInterval] = useState<any>(null);
-  const [seconds, setSeconds] = useState<number>(0);
-  const [minutes, setMinutes] = useState<number>(0);
+  // const [seconds, setSeconds] = useState<number>(0);
+  // const [minutes, setMinutes] = useState<number>(0);
 
   const [isAnimated, setIsAnimated] = useState<boolean>(false);
 
@@ -40,7 +49,7 @@ export const TaimerComponent: FC<TaimerComponentProps> = ({
     if (isTimer) {
       setStateInterval(
         setInterval(() => {
-          setSeconds(el => (el < 60 ? el + 1 : 1));
+          setSeconds((el: number) => (el < 60 ? el + 1 : 1));
         }, 1000),
       );
     } else {
@@ -54,10 +63,10 @@ export const TaimerComponent: FC<TaimerComponentProps> = ({
   useEffect(() => {
     isTimerStart
       ? (clearInterval(stateInterval),
-        setSeconds(el => el + 1),
+        setSeconds((el: number) => el + 1),
         setStateInterval(
           setInterval(() => {
-            setSeconds(el => (el < 60 ? el + 1 : 1));
+            setSeconds((el: number) => (el < 60 ? el + 1 : 1));
           }, 1000),
         ))
       : clearInterval(stateInterval);
@@ -66,12 +75,13 @@ export const TaimerComponent: FC<TaimerComponentProps> = ({
 
   useEffect(() => {
     setIsAnimated(!isAnimated);
-    seconds === 60 && setMinutes(el => el + 1);
+    seconds === 60 && setMinutes((el: number) => el + 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seconds]);
 
   useEffect(() => {
     minutes === 59 && setMinutes(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minutes]);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -88,19 +98,24 @@ export const TaimerComponent: FC<TaimerComponentProps> = ({
         </Text>
       </Animated.View>
       <View style={styles.containerButton}>
-        <Pressable onPress={startTimer} style={styles.button}>
-          <Text style={[styles.text, styles.textButton]}>
-            {buttonTextStart}
-          </Text>
-        </Pressable>
-        <Pressable onPress={stopTimer} style={styles.button}>
-          <Text style={[styles.text, styles.textButton]}>{buttonTextStop}</Text>
-        </Pressable>
-        <Pressable onPress={resetTimer} style={styles.button}>
-          <Text style={[styles.text, styles.textButton]}>
-            {buttonTextReset}
-          </Text>
-        </Pressable>
+        <ButtonContainer
+          onPress={startTimer}
+          text={buttonTextStart}
+          buttonStyle={styles.button}
+          textStyle={[styles.textButton]}
+        />
+        <ButtonContainer
+          onPress={stopTimer}
+          text={buttonTextStop}
+          buttonStyle={styles.button}
+          textStyle={[styles.textButton]}
+        />
+        <ButtonContainer
+          onPress={resetTimer}
+          text={buttonTextReset}
+          buttonStyle={styles.button}
+          textStyle={[styles.textButton]}
+        />
       </View>
     </View>
   );
@@ -108,21 +123,30 @@ export const TaimerComponent: FC<TaimerComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     flexDirection: 'row',
-    marginTop: dh(10),
+    width: '100%',
+    height: height / 6,
+    // height: '18%',
+    alignItems: 'center',
   },
   containerButton: {
     justifyContent: 'space-between',
-    width: dw(250),
+    alignContent: 'space-between',
+    width: width / 1.55,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    height: '100%',
+    paddingVertical: '3%',
+  },
+  containerButtonImage: {
+    paddingVertical: '3%',
   },
   containerAnimate: {
     justifyContent: 'center',
-    width: dw(100),
-    height: dw(100),
-    borderRadius: dw(50),
+    width: width / 3.6,
+    height: width / 3.6,
+    borderRadius: width / 3.6,
     borderWidth: 5,
   },
   text: {
@@ -137,15 +161,11 @@ const styles = StyleSheet.create({
   textButton: {
     fontSize: 16,
     color: COLORS.WHITE,
-    fontWeight: '700',
+    fontWeight: '500',
   },
   button: {
-    paddingHorizontal: 24,
-    paddingVertical: 10,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: COLORS.CERISE_RED,
-    borderRadius: 20,
-    marginBottom: 10,
+    width: width / 3.2,
+    paddingHorizontal: 0,
+    paddingVertical: height / 80,
   },
 });

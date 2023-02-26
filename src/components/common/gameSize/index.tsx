@@ -8,6 +8,7 @@ import {
 } from '../../../redux/store/actionCreator/actionCreatorImage';
 import {PressableTextView} from '../../../common/pressableTextView';
 import {randomInteger} from '../../../common/functions/randomInteger';
+import {dw} from '../../../utils/dimensions';
 
 interface GameSizeProps {
   navigation?: any;
@@ -23,7 +24,7 @@ export const GameSize: FC<GameSizeProps> = ({
   const dispatch = useAppDispatch();
 
   const {isTheme} = useAppSelector(reducer => reducer.themeReducer);
-  const {numberOfImage, isImageChoose, isImageComponent} = useAppSelector(
+  const {numberOfImage, isImageChoose} = useAppSelector(
     reducer => reducer.imageSlice,
   );
 
@@ -45,11 +46,7 @@ export const GameSize: FC<GameSizeProps> = ({
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        isImageComponent && styles.containerClasssicGame,
-      ]}>
+    <View style={[styles.container]}>
       {arraySize.map((el: number) => {
         return (
           <PressableTextView
@@ -69,10 +66,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-  },
-  containerClasssicGame: {
-    marginTop: '55%',
+    alignContent: 'center',
+    paddingHorizontal: dw(10),
+    width: '100%',
+    height: '100%',
   },
 });

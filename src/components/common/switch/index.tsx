@@ -6,18 +6,20 @@ import {THEME_DARK_ICON, THEME_LIGHT_ICON} from '../../../constants/images';
 
 interface SwitchComponentProps {
   isTheme?: any;
+  containerStyle?: any;
   onPress: () => void;
 }
 
 export const SwitchComponent: FC<SwitchComponentProps> = ({
   isTheme = false,
+  containerStyle,
   onPress,
 }) => {
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          translateX: withTiming(isTheme ? 56 : 0, {
+          translateX: withTiming(isTheme ? 60 : 0, {
             duration: 500,
           }),
         },
@@ -26,7 +28,11 @@ export const SwitchComponent: FC<SwitchComponentProps> = ({
   });
   return (
     <Pressable
-      style={[styles.container, isTheme && styles.containerTheme]}
+      style={[
+        styles.container,
+        isTheme && styles.containerTheme,
+        containerStyle && containerStyle,
+      ]}
       onPress={onPress}>
       <Animated.View style={[animatedStyle]}>
         <Image
@@ -41,7 +47,7 @@ export const SwitchComponent: FC<SwitchComponentProps> = ({
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    width: '25%',
+    width: 100,
     borderRadius: 15,
     paddingVertical: 3,
     paddingHorizontal: 5,

@@ -10,6 +10,7 @@ export const setPositionTarget =
     value.id !== undefined && soundFunc('DEFAULT_MOVE', 1);
     array &&
       setTimeout(() => {
+        dispatch(PositionSlice.actions.setPositionTarget({}));
         dispatch(ArrayCurrentSlice.actions.setArrayCurrent(array));
-      }, 500);
+      }, 700);
   };

@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {IMAGES_BY_KEYS} from '../../../../constants/images';
-import {dh, dw} from '../../../../utils/dimensions';
+import {dw, height, width} from '../../../../utils/dimensions';
 import {BigImageComponent} from '../../../bigImageComponent';
 import {ButtonContainer} from '../../../common/button';
 
@@ -25,23 +25,36 @@ export const RenderPageHeader: FC<RenderPageHeaderProps> = ({
   onRandomArray,
 }) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        isImageComponent ? styles.containerImageComponent : styles.container,
+      ]}>
       {isImageComponent && (
         <BigImageComponent
           isTheme={isTheme}
           imageIcon={IMAGES_BY_KEYS[numberOfImage]}
+          containerStyle={styles.containerImage}
           onPress={modalImageFunc}
         />
       )}
-      <View
-        style={[
-          styles.containerRight,
-          !isImageComponent && !isImageChoose && styles.containerRightTheme,
-        ]}>
+      <View style={[isImageComponent && styles.containerRightImage]}>
         {isImageComponent && !isImageChoose && (
-          <ButtonContainer onPress={changeImageFunc} text={'Change image'} />
+          <ButtonContainer
+            onPress={changeImageFunc}
+            text={'Change image'}
+            buttonStyle={styles.containerButton}
+            textStyle={styles.textButton}
+          />
         )}
-        <ButtonContainer onPress={onRandomArray} text={'Random array'} />
+        <ButtonContainer
+          onPress={onRandomArray}
+          text={'Random array'}
+          buttonStyle={isImageComponent && styles.containerButton}
+          textStyle={[
+            styles.textButton,
+            !isImageComponent && styles.textButtonClassic,
+          ]}
+        />
       </View>
     </View>
   );
@@ -49,16 +62,38 @@ export const RenderPageHeader: FC<RenderPageHeaderProps> = ({
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    height: '9%',
+    marginTop: '5%',
+  },
+  containerImageComponent: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: '24%',
+    marginTop: 0,
+  },
+  containerRightImage: {
+    height: '100%',
+    width: width / 2.6,
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    marginHorizontal: dw(10),
+    marginLeft: dw(5),
   },
-  containerRight: {
-    flexDirection: 'column',
-    marginLeft: dw(10),
+  containerImage: {
+    width: width / 1.77,
   },
-  containerRightTheme: {
-    marginTop: dh(10),
+  containerButton: {
+    paddingVertical: height / 80,
+    width: width / 2.8,
+    marginBottom: height / 70,
+    paddingHorizontal: 0,
+  },
+  textButton: {
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  textButtonClassic: {
+    fontSize: 20,
   },
 });

@@ -20,6 +20,7 @@ interface RenderStartProps {
 export const RenderStart: FC<RenderStartProps> = (...props) => {
   const {arrayLength} = useAppSelector(reducer => reducer.currentArrayReducer);
   const {imagePath} = useAppSelector(reducer => reducer.imageSlice);
+  const {isModalEnd} = useAppSelector(reducer => reducer.modalReducer);
 
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -27,7 +28,12 @@ export const RenderStart: FC<RenderStartProps> = (...props) => {
     dispatch(setIsModalRandom(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const isModalEndFunc = (value?: boolean) => {
+    dispatch(setIsModalEnd(value === undefined ? !isModalEnd : value));
+  };
+
   const changeImageFunc = () => {
+    isModalEndFunc(false);
     dispatch(setResetTimer());
     dispatch(setIsModalEnd(false));
     let numberOfImageLocal = randomInteger(1, 4);
@@ -37,6 +43,7 @@ export const RenderStart: FC<RenderStartProps> = (...props) => {
         `${props[0].route.params.imagePathFirstFigure}${numberOfImageLocal}`,
         setOriginLine,
         dispatch,
+        'new image',
       ),
     );
     dispatch(setNumberOfImage(numberOfImageLocal));
@@ -45,6 +52,7 @@ export const RenderStart: FC<RenderStartProps> = (...props) => {
     <RenderPage
       navigation={props[0].navigation}
       changeImageFunc={changeImageFunc}
+      isModalEndFunc={isModalEndFunc}
     />
   );
 };

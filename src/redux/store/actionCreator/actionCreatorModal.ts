@@ -10,9 +10,9 @@ export const setIsModalRandom = (value: boolean) => (dispatch: AppDispatch) => {
 
 export const setIsModalEnd = (value: boolean) => (dispatch: AppDispatch) => {
   if (value) {
-    soundFunc('DEFAULT_END', 1);
     dispatch(TimerSlice.actions.setIsTimer(false));
     dispatch(SequenceOfArraySlice.actions.setIsOriginLine(false));
+    soundFunc('DEFAULT_END', 1);
   }
   dispatch(ModalSlice.actions.setIsModalEnd(value));
 };

@@ -9,7 +9,7 @@ import {
   setIsImageComponent,
   setNumberOfImage,
 } from '../../redux/store/actionCreator/actionCreatorImage';
-import {dw, height} from '../../utils/dimensions';
+import {dw} from '../../utils/dimensions';
 
 interface CategoriesProps {
   navigation?: any;
@@ -44,6 +44,7 @@ export const ChooseImage: FC<CategoriesProps> = ({navigation}) => {
               type={'image'}
               isTheme={isTheme}
               imageIcon={IMAGES_BY_KEYS[el.id]}
+              containerStyle={isTheme && styles.containerStyleTheme}
               onPress={onPress}
             />
           );
@@ -58,6 +59,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     paddingHorizontal: dw(10),
-    marginTop: height / 5.5,
+    alignContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  containerStyleTheme: {
+    elevation: 5,
   },
 });

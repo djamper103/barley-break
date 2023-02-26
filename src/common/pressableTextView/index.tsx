@@ -8,6 +8,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import {COLORS} from '../../constants/colors';
+import {CELL_WIDTH, dh, dw} from '../../utils/dimensions';
 
 interface PressableTextViewProps {
   data?: any;
@@ -35,7 +36,6 @@ export const PressableTextView: FC<PressableTextViewProps> = ({
   onPress,
 }) => {
   const onPressItem = () => {
-    console.log('1');
     onPress(data);
   };
   return (
@@ -64,27 +64,33 @@ export const PressableTextView: FC<PressableTextViewProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: 190,
-    height: 190,
+    width: CELL_WIDTH(2, dw(15)),
+    height: CELL_WIDTH(2, dw(15)),
     backgroundColor: COLORS.BISCAY,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 15,
+    marginBottom: dh(15),
+
+    shadowColor: COLORS.BISCAY,
+    elevation: 15,
   },
   containerTheme: {
     backgroundColor: COLORS.WHITE,
+    shadowColor: COLORS.WHITE,
+    elevation: 10,
   },
   text: {
-    fontSize: 32,
+    fontSize: 36,
     color: COLORS.WHITE,
+    fontWeight: '400',
+    textShadowRadius: 4,
   },
   textTheme: {
-    color: COLORS.BLACK,
+    color: COLORS.DUNE,
   },
   image: {
-    width: 190,
-    height: 190,
-    // resizeMode: 'contain',
+    width: '100%',
+    height: '100%',
     backgroundColor: COLORS.TRANSPARENT,
   },
 });

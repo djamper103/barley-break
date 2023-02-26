@@ -1,6 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {FlatList, StyleSheet} from 'react-native';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {randomArrayFunc} from '../../common/functions/randomArray';
 import {setArrayCurrentFunc} from '../../common/functions/setPositionArrayFunc';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
@@ -25,16 +24,18 @@ import {useIsFocused} from '@react-navigation/native';
 import {RenderPageHeader} from './components/header';
 import {RenderPageModal} from './components/modal';
 import {setIsModalEnd} from '../../redux/store/actionCreator/actionCreatorModal';
-import {dh} from '../../utils/dimensions';
+import {dw, width} from '../../utils/dimensions';
 
 interface RenderPageProps {
   navigation?: any;
   changeImageFunc?: () => void;
+  isModalEndFunc: () => void;
 }
 
 export const RenderPage: FC<RenderPageProps> = ({
   navigation,
   changeImageFunc,
+  isModalEndFunc,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -65,6 +66,9 @@ export const RenderPage: FC<RenderPageProps> = ({
 
   const [isModalImageCurrent, setIsModalImageCurrent] = useState(false);
 
+  const [seconds, setSeconds] = useState<number>(0);
+  const [minutes, setMinutes] = useState<number>(0);
+
   useEffect(() => {
     if (currentLine.length > 0) {
       dispatch(setIsOriginLine(originLine, currentLine));
@@ -86,10 +90,6 @@ export const RenderPage: FC<RenderPageProps> = ({
     dispatch(setArrayCurrent(randomArrayFunc([...arrayCurrent]), 'modal'));
     dispatch(setIsModalEnd(false));
     resetTimer();
-  };
-
-  const setPositionTargetNull = () => {
-    dispatch(setPositionTarget({}));
   };
 
   const setPositionNull = (value: PositionType) => {
@@ -126,12 +126,9 @@ export const RenderPage: FC<RenderPageProps> = ({
   };
 
   const goToMainFunc = () => {
+    dispatch(setIsModalEnd(false));
     isModalEndFunc();
     navigation.push('Menu');
-  };
-
-  const isModalEndFunc = () => {
-    dispatch(setIsModalEnd(!isModalEnd));
   };
 
   const RenderItem: any = (data: any) => {
@@ -143,20 +140,21 @@ export const RenderPage: FC<RenderPageProps> = ({
         imagePath={imagePath}
         arrayLength={arrayLength}
         onPress={onPress}
-        setPositionTargetNull={setPositionTargetNull}
         setPositionNull={setPositionNull}
       />
     );
   };
 
   return (
-    <GestureHandlerRootView>
+    <View style={[styles.container, isImageComponent && styles.containerImage]}>
       <RenderPageModal
         isTheme={isTheme}
         isModalRandom={isModalRandom}
         isModalEnd={isModalEnd}
         isModalImageCurrent={isModalImageCurrent}
         numberOfImage={numberOfImage}
+        seconds={seconds}
+        minutes={minutes}
         onRandomArray={onRandomArray}
         modalImageFunc={modalImageFunc}
         changeImageFunc={changeImageFunc}
@@ -179,30 +177,40 @@ export const RenderPage: FC<RenderPageProps> = ({
         showsVerticalScrollIndicator={false}
         numColumns={arrayLength}
         key={arrayLength}
-        contentContainerStyle={[
-          styles.containerFlatList,
-          imagePath === 'none' && styles.containerNone,
-        ]}
+        contentContainerStyle={[styles.containerFlatList]}
       />
       <TaimerComponent
         isTimer={isTimer}
         isTimerStart={isTimerStart}
         isTimerPlug={isTimerPlug}
         isTheme={isTheme}
+        seconds={seconds}
+        minutes={minutes}
+        setSeconds={setSeconds}
+        setMinutes={setMinutes}
         resetTimer={resetTimer}
         startTimer={startTimer}
         stopTimer={stopTimer}
       />
-    </GestureHandlerRootView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  containerFlatList: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  container: {
+    width: width,
+    paddingHorizontal: dw(10),
+    justifyContent: 'space-between',
+    height: '100%',
+    paddingBottom: '29%',
   },
-  containerNone: {
-    marginVertical: dh(30),
+  containerImage: {
+    height: '100%',
+    // height: height / 1.075,
+    paddingBottom: '4%',
+  },
+  containerFlatList: {
+    height: '100%',
+    justifyContent: 'center',
   },
 });

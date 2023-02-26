@@ -1,9 +1,8 @@
 import React, {FC} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {BackHandler, Pressable, StyleSheet, Text, View} from 'react-native';
 import {COLORS} from '../../constants/colors';
 import {arrayMenu} from '../../constants/common';
 import {useAppSelector} from '../../hooks/redux';
-import {dh} from '../../utils/dimensions';
 
 interface MenuProps {
   navigation?: any;
@@ -19,7 +18,9 @@ export const Menu: FC<MenuProps> = ({navigation}) => {
       {arrayMenu.map((el: any) => {
         return (
           <Pressable
-            onPress={() => onPress(el)}
+            onPress={() =>
+              el === 'Close app' ? BackHandler.exitApp() : onPress(el)
+            }
             key={el}
             style={styles.containerButton}>
             <Text style={[styles.text, isTheme && styles.textTheme]}>{el}</Text>
@@ -33,16 +34,20 @@ export const Menu: FC<MenuProps> = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    marginTop: dh(200),
+    marginTop: '50%',
   },
   containerButton: {
-    margin: dh(12),
+    margin: 12,
   },
   text: {
-    color: COLORS.DUNE,
+    color: COLORS.BLACK,
     fontSize: 32,
     textAlign: 'center',
     fontWeight: '400',
+    letterSpacing: 1,
+    textShadowRadius: 1,
+    fontFamily: 'georgia',
+    textTransform: 'capitalize',
   },
   textTheme: {
     color: COLORS.WHITE,

@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {SwitchComponent} from '../../components/common/switch';
 import {COLORS} from '../../constants/colors';
-import {dw} from '../../utils/dimensions';
 
 interface HeaderNavigationProps {
   navigation?: any;
@@ -36,12 +35,7 @@ export const HeaderNavigation: FC<HeaderNavigationProps> = (...props) => {
         props[0].componentName !== 'Menu' && styles.containerTheme,
       ]}>
       {props[0].componentName !== 'Menu' && (
-        <TouchableOpacity
-          onPress={onPressBack}
-          style={[
-            styles.containerBack,
-            props[0].isTheme && styles.containerBackTheme,
-          ]}>
+        <TouchableOpacity onPress={onPressBack}>
           <Image
             source={props[0].leftIcon}
             style={[
@@ -62,17 +56,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: dw(10),
-    paddingHorizontal: dw(10),
+    paddingHorizontal: '2%',
   },
   containerTheme: {
     justifyContent: 'space-between',
-  },
-  containerBack: {
-    borderRadius: dw(50),
-  },
-  containerBackTheme: {
-    // backgroundColor: COLORS.OXFORD_BLUE,
   },
   image: {
     resizeMode: 'contain',

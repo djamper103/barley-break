@@ -2,22 +2,23 @@ import React, {FC} from 'react';
 import {StyleSheet} from 'react-native';
 import {PressableTextView} from '../../common/pressableTextView';
 import {COLORS} from '../../constants/colors';
-import {dw} from '../../utils/dimensions';
 
 interface BigImageComponentProps {
-  onPress: () => void;
   isTheme?: boolean;
   imageIcon?: any;
+  containerStyle?: any;
+  onPress: () => void;
 }
 
 export const BigImageComponent: FC<BigImageComponentProps> = ({
   isTheme,
   imageIcon,
+  containerStyle,
   onPress,
 }) => {
   return (
     <PressableTextView
-      containerStyle={styles.container}
+      containerStyle={[styles.container, containerStyle && containerStyle]}
       data={true}
       isTheme={isTheme}
       type={'image'}
@@ -30,13 +31,13 @@ export const BigImageComponent: FC<BigImageComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    width: dw(200),
-    height: dw(180),
+    width: '61%',
+    height: '100%',
+    backgroundColor: COLORS.TRANSPARENT,
   },
   image: {
-    width: dw(200),
-    height: dw(180),
+    width: '100%',
+    height: '100%',
     // resizeMode: 'contain',
     backgroundColor: COLORS.TRANSPARENT,
   },
