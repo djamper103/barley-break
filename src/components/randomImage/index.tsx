@@ -18,6 +18,7 @@ export const RandomImageGame: FC<RandomImageGameProps> = ({navigation}) => {
     reducer => reducer.imageSlice,
   );
 
+  //setting field type image
   useEffect(() => {
     isImageChoose && dispatch(setIsImageChoose(false));
     !isImageComponent && dispatch(setIsImageComponent(true));

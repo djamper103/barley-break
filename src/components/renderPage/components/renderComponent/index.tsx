@@ -45,6 +45,7 @@ export const RenderComponent: FC<RenderComponentProps> = ({
   const [count, setCount] = useState<number>(0);
 
   useEffect(() => {
+    //if target then set positionTarget.x, positionTarget.y
     if (positionTarget.id === data.id) {
       positionTarget.positionType === 'x'
         ? (offsetX.value = positionTarget.x)
@@ -64,7 +65,9 @@ export const RenderComponent: FC<RenderComponentProps> = ({
           pageX: number,
           pageY: number,
         ) => {
+          // without setCount(1) the values are not updated
           setCount(1);
+          //setting container coordinates
           pageX !== undefined &&
             setPositionNull({
               id: data.id,
@@ -79,6 +82,7 @@ export const RenderComponent: FC<RenderComponentProps> = ({
   }, [aref.current]);
 
   const animatedStyle = useAnimatedStyle(() => {
+    // set animated values
     return {
       opacity: isNullValue ? 0 : 1,
       transform: [
@@ -90,6 +94,7 @@ export const RenderComponent: FC<RenderComponentProps> = ({
     };
   });
 
+  //set gesture values
   const panGesture = Gesture.Pan()
     .runOnJS(true)
     .onEnd(event => {
@@ -106,6 +111,7 @@ export const RenderComponent: FC<RenderComponentProps> = ({
         pageX: number,
         pageY: number,
       ) => {
+        //setting container target coordinates
         positionTarget.id === undefined &&
           onPress(
             {
@@ -121,6 +127,7 @@ export const RenderComponent: FC<RenderComponentProps> = ({
     );
   };
 
+  //choose image type
   const sourceImage =
     arrayLength === 3
       ? IMAGES_3_BY_KEYS[`${imagePath}${data.id}`]

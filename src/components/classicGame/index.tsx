@@ -13,6 +13,7 @@ export const ClassicGame: FC<ClassicGameProps> = ({navigation}) => {
 
   const {isImageComponent} = useAppSelector(reducer => reducer.imageSlice);
 
+  //field type setting classic
   useEffect(() => {
     isImageComponent && dispatch(setIsImageComponent(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps

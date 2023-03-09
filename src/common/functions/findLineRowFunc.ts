@@ -18,6 +18,8 @@ export const findLineRowFunc = (
 
   let currentArrayLength = arrayLength;
 
+  // search for line and row position number target and null
+
   array.forEach((el, index) => {
     if (index < currentArrayLength) {
       countCorrentRow = countCorrentRow + 1;

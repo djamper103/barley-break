@@ -29,9 +29,12 @@ export const GameSize: FC<GameSizeProps> = ({
   );
 
   const onPress = (value: number) => {
+    //random image selection
     let numberOfImageLocal = randomInteger(1, 4);
     isImageChoose === false && dispatch(setNumberOfImage(numberOfImageLocal));
+    //field size selection
     dispatch(setArrayLength(value));
+    //image path selection
     dispatch(
       setImage(
         imagePath === 'none'

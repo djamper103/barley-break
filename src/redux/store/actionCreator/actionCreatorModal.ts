@@ -9,6 +9,7 @@ export const setIsModalRandom = (value: boolean) => (dispatch: AppDispatch) => {
 };
 
 export const setIsModalEnd = (value: boolean) => (dispatch: AppDispatch) => {
+  //when the game is over
   if (value) {
     dispatch(TimerSlice.actions.setIsTimer(false));
     dispatch(SequenceOfArraySlice.actions.setIsOriginLine(false));

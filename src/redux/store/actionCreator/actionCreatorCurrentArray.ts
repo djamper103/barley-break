@@ -4,6 +4,7 @@ import {ImageSlice} from '../reducers/imageSlice';
 import {ModalSlice} from '../reducers/modalSlice';
 import {AppDispatch} from '../store';
 
+//set array current if type = modal show modal random
 export const setArrayCurrent =
   (array: any[], type?: string) => (dispatch: AppDispatch) => {
     dispatch(ArrayCurrentSlice.actions.setArrayCurrent(array));
@@ -20,6 +21,8 @@ export const setArrayStart =
   ) =>
   (dispatch: AppDispatch) => {
     const lineArray: any = [];
+
+    //generate new array with current length
     const arrayGenerate = new Array(arrayLength * arrayLength)
       .fill(0)
       .map((_, index) => {
@@ -27,9 +30,11 @@ export const setArrayStart =
         return {id: index, path: `${imagePath}${index}`};
       });
 
+    //set origin array sequence
     dispatchCurrent(setOriginLine(lineArray));
 
     if (type !== undefined && type === 'new image') {
+      //change image
       const newImage = randomArrayFunc([...arrayGenerate]);
       dispatch(
         ArrayCurrentSlice.actions.setArrayCurrent({
@@ -39,6 +44,7 @@ export const setArrayStart =
         }),
       );
     } else {
+      //set start array
       dispatch(
         ArrayCurrentSlice.actions.setArrayCurrent({
           array: arrayGenerate,

@@ -66,9 +66,11 @@ export const RenderPage: FC<RenderPageProps> = ({
 
   const [isModalImageCurrent, setIsModalImageCurrent] = useState(false);
 
+  //for timer
   const [seconds, setSeconds] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
 
+  //comparing whether the current array sequence is the original array
   useEffect(() => {
     if (currentLine.length > 0) {
       dispatch(setIsOriginLine(originLine, currentLine));
@@ -76,42 +78,51 @@ export const RenderPage: FC<RenderPageProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentLine]);
 
+  //if current array equals origin then show modal end
   useEffect(() => {
     isOriginLine && isModalEndFunc();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOriginLine]);
 
+  //when unmounting a component stop and reset timer
   useEffect(() => {
     !isFocused && dispatch(setIsTimer(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused]);
 
+  //random current array
   const onRandomArray = () => {
     dispatch(setArrayCurrent(randomArrayFunc([...arrayCurrent]), 'modal'));
     dispatch(setIsModalEnd(false));
     resetTimer();
   };
 
+  //set null position coordinates
   const setPositionNull = (value: PositionType) => {
     dispatch(setNull(value));
   };
 
+  //set image modal boolean value
   const modalImageFunc = () => {
     setIsModalImageCurrent(!isModalImageCurrent);
   };
 
+  //reset timer
   const resetTimer = () => {
     dispatch(setResetTimer());
   };
 
+  //start timer
   const startTimer = () => {
     dispatch(setIsTimerStart(true));
   };
 
+  //stop timer
   const stopTimer = () => {
     dispatch(setIsTimerStart(false));
   };
 
+  //called when you swipe an array cell
   const onPress = (data: PositionType, valueMove: any) => {
     setArrayCurrentFunc(
       arrayCurrent,
@@ -125,12 +136,14 @@ export const RenderPage: FC<RenderPageProps> = ({
     );
   };
 
+  //push to main menu
   const goToMainFunc = () => {
     dispatch(setIsModalEnd(false));
     isModalEndFunc();
     navigation.push('Menu');
   };
 
+  //render array cell
   const RenderItem: any = (data: any) => {
     return (
       <RenderComponent
@@ -206,7 +219,6 @@ const styles = StyleSheet.create({
   },
   containerImage: {
     height: '100%',
-    // height: height / 1.075,
     paddingBottom: '4%',
   },
   containerFlatList: {

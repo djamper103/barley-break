@@ -23,12 +23,14 @@ export const ChooseImage: FC<CategoriesProps> = ({navigation}) => {
   const {isTheme} = useAppSelector(reducer => reducer.themeReducer);
 
   useEffect(() => {
+    //setting the size of the array that is displayed to select the size of the field and its type
     dispatch(setAmountArray(imageRandomAmount));
     !isImageChoose && dispatch(setIsImageChoose(true));
     !isImageComponent && dispatch(setIsImageComponent(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  //select image number and switch to field size selection
   const onPress = (value: {id: number}) => {
     dispatch(setNumberOfImage(value.id));
     navigation.push('Game size', {type: 'wadw'});

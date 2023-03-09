@@ -21,9 +21,12 @@ interface HeaderNavigationProps {
 }
 
 export const HeaderNavigation: FC<HeaderNavigationProps> = (...props) => {
+  //go back to last component
   const onPressBack = () => {
     props[0].props.navigation.goBack();
   };
+
+  //change theme
   const onPressTheme = () => {
     props[0].setTheme();
   };

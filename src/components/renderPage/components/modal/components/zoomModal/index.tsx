@@ -22,6 +22,7 @@ export const ZoomModal: FC<ZoomModalProps> = ({
   numberOfImage = 1,
   modalImageFunc,
 }) => {
+  //output view to work zoom inside the modal
   return (
     <ModalContainer isModal={isModalImageCurrent}>
       <GestureHandlerRootView>

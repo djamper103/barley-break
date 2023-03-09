@@ -27,10 +27,12 @@ export const NavigationContainerFC: FC = () => {
 
   const dispatch = useAppDispatch();
 
+  //set theme
   const setTheme = () => {
     dispatch(setIsTheme(isTheme));
   };
 
+  //needed to change main backgroundColor
   const MyTheme = {
     ...DefaultTheme,
     colors: {

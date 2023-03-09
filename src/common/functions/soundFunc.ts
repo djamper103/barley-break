@@ -5,6 +5,7 @@ const Sound = require('react-native-sound');
 Sound.setCategory('Playback');
 
 export const soundFunc = (type: string, soundVolume: number) => {
+  // play end and move sound
   const audio = new Sound(SOUND_BY_KEYS[type], null);
   audio.setVolume(soundVolume);
   setTimeout(() => {

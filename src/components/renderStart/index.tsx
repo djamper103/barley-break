@@ -23,15 +23,20 @@ export const RenderStart: FC<RenderStartProps> = (...props) => {
   const {isModalEnd} = useAppSelector(reducer => reducer.modalReducer);
 
   const dispatch = useAppDispatch();
+
+  //set start array and random arrat button
   useEffect(() => {
     dispatch(setArrayStart(arrayLength, imagePath, setOriginLine, dispatch));
     dispatch(setIsModalRandom(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  //set modal end value
   const isModalEndFunc = (value?: boolean) => {
     dispatch(setIsModalEnd(value === undefined ? !isModalEnd : value));
   };
 
+  //set new image, reset and stop timer
   const changeImageFunc = () => {
     isModalEndFunc(false);
     dispatch(setResetTimer());

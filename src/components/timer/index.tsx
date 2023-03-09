@@ -40,12 +40,11 @@ export const TaimerComponent: FC<TaimerComponentProps> = ({
   setMinutes,
 }) => {
   const [stateInterval, setStateInterval] = useState<any>(null);
-  // const [seconds, setSeconds] = useState<number>(0);
-  // const [minutes, setMinutes] = useState<number>(0);
 
   const [isAnimated, setIsAnimated] = useState<boolean>(false);
 
   useEffect(() => {
+    //set and clear interval
     if (isTimer) {
       setStateInterval(
         setInterval(() => {
@@ -61,6 +60,7 @@ export const TaimerComponent: FC<TaimerComponentProps> = ({
   }, [isTimer]);
 
   useEffect(() => {
+    //check if the timer is on
     isTimerStart
       ? (clearInterval(stateInterval),
         setSeconds((el: number) => el + 1),

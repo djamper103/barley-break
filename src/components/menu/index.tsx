@@ -10,6 +10,7 @@ interface MenuProps {
 
 export const Menu: FC<MenuProps> = ({navigation}) => {
   const {isTheme} = useAppSelector(reducer => reducer.themeReducer);
+  //push to the selected section
   const onPress = (value: string) => {
     navigation.push(value);
   };
